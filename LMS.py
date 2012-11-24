@@ -1,7 +1,9 @@
 import os
 import sys
 import subprocess
+
 import colors
+import OptionMenu
 
 NAME = "LMS"
 VERSION = "0.0.0"
@@ -11,7 +13,7 @@ DEBUG = True
 def preloadchecks():
 
     pd(os.getcwd())
-    os.chdir(r"C:/Users/Daniel/Desktop/lrr")
+    os.chdir(r"C:/Users/Daniel/Desktop/lrr") # TEMPORARY HACK
     pd(os.getcwd())
 
     try:
@@ -19,7 +21,7 @@ def preloadchecks():
             pd("Executable located.")
             pass
     except BaseException as e:
-        p("Game not found.  Aborting.")
+        pc("Game not found.  Aborting.", )
 
 
 def launchLRR():
@@ -30,22 +32,30 @@ def launchLRR():
 def preloadobserve():
     pass
 
+################################################################################
+
+def pc(t, c = 0x0):
+    t = " * " + str(t)
+    colors.pc(t,c)
+
 def pd(i):
-    if DEBUG: print " @ " + str(i)
+    if DEBUG: colors.pc(" @ " + str(i), colors.FOREGROUND_CYAN)
 
 def p(i):
-    print " - " + str(i)
+    print " * " + str(i)
+
+################################################################################
 
 def main():
-    p("Powering up LMS...")
+    pc("Powering up LMS...", colors.FOREGROUND_GREEN)
 
-    pd("Gathering environment varibles...")
+    pc("Gathering environment varibles...", colors.FOREGROUND_GREEN)
     preloadobserve()
 
-    pd("Running diagnostics...")
+    pc("Running diagnostics...", colors.FOREGROUND_GREEN)
     preloadchecks()
 
-    colors.pc("System online.", colors.FOREGROUND_GREEN)
+    pc("System online.", colors.FOREGROUND_LIGHT_GREEN)
 
 if __name__ == '__main__':
     print NAME + " Version " + VERSION + SUBVERSION + "\n"
