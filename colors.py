@@ -51,11 +51,11 @@ def get_csbi_attributes(handle):
     left, top, right, bottom, maxx, maxy) = struct.unpack("hhhhHhhhhhh", csbi.raw)
     return wattr
 
-def pc(text, color):
+def pc(text, color, nl = True):
     ctypes.windll.kernel32.SetConsoleTextAttribute(handle, color)
     print text,
     ctypes.windll.kernel32.SetConsoleTextAttribute(handle, reset)
-    print ""
+    if nl: print ""
     sys.stdout.flush()
 
 handle = ctypes.windll.kernel32.GetStdHandle(STD_OUTPUT_HANDLE)

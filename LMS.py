@@ -3,14 +3,33 @@ import sys
 import subprocess
 
 import colors
-import OptionMenu
+
 
 NAME = "LMS"
 VERSION = "0.0.0"
 SUBVERSION = " PRE ALPHA"
 DEBUG = True
 
+
+
+
+
+################################################################################
+
+def initGUI():
+    pd("GUI disabled temporarily.")
+
+################################################################################
+
+def initLMS():
+    preloadobserve()
+    preloadchecks()
+
+    pc("System online, initalizing interface...", colors.FOREGROUND_LIGHT_GREEN)
+    initGUI()
+
 def preloadchecks():
+    pc("Running diagnostics...", colors.FOREGROUND_GREEN)
 
     pd(os.getcwd())
     os.chdir(r"C:/Users/Daniel/Desktop/lrr") # TEMPORARY HACK
@@ -30,13 +49,13 @@ def launchLRR():
     p("Game terminated.")
 
 def preloadobserve():
-    pass
+    pc("Gathering environment varibles...", colors.FOREGROUND_GREEN)
 
 ################################################################################
 
-def pc(t, c = 0x0):
+def pc(t, c = 0xf, nl = True):
     t = " * " + str(t)
-    colors.pc(t,c)
+    colors.pc(t,c, nl)
 
 def pd(i):
     if DEBUG: colors.pc(" @ " + str(i), colors.FOREGROUND_CYAN)
@@ -46,16 +65,26 @@ def p(i):
 
 ################################################################################
 
+def mainmenu():
+    while True:
+        print;
+        o = ["[1] Launch game","[2] Quit"]
+
+        [pc(oo) for oo in o]
+
+        print "\n >",
+        try: r = sys.stdin.readline()[:-1]
+        except: r = None
+
+        if r: launchLRR()
+        else: break
+
+################################################################################
+
 def main():
     pc("Powering up LMS...", colors.FOREGROUND_GREEN)
-
-    pc("Gathering environment varibles...", colors.FOREGROUND_GREEN)
-    preloadobserve()
-
-    pc("Running diagnostics...", colors.FOREGROUND_GREEN)
-    preloadchecks()
-
-    pc("System online.", colors.FOREGROUND_LIGHT_GREEN)
+    initLMS()
+    mainmenu()
 
 if __name__ == '__main__':
     print NAME + " Version " + VERSION + SUBVERSION + "\n"
