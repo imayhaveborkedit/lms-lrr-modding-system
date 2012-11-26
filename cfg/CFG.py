@@ -11,6 +11,7 @@ def patch(user_cfg, mod_cfg):
     f = open(user_cfg, 'r+')
     user_cfg_text = f.read()
     patches = dmp.patch_make(user_cfg_text, open(mod_cfg).read())
+    return patches
     results = dmp.patch_apply(patches, user_cfg_text)
     f.seek(0)
     f.write(results[0])
@@ -19,4 +20,4 @@ def patch(user_cfg, mod_cfg):
 
 
 r = patch("user.cfg", "mod.cfg")
-print r
+print r[0]
