@@ -76,8 +76,8 @@ def mainmenu():
         try: r = sys.stdin.readline()[:-1]
         except: r = None
 
-        if r: launchLRR()
-        else: break
+        if r == 1: launchLRR()
+        elif r == 2 or None: break
 
 ################################################################################
 
