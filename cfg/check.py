@@ -6,17 +6,18 @@ import glob
 sys.path.append(os.path.normpath(os.path.join(sys.path[0],'..')))
 import color.colors as colors
 
-f = os.path.join("C:/Users/Daniel/Desktop/lrr","Data/Lego.cfg") # TEMPORARY HACK
 linenumber = 0
+rootfolders = tuple(os.listdir("Data"))
+f = os.path.join("C:/Users/Daniel/Desktop/lrr","Data/Lego.cfg") # TEMPORARY HACK
 pathregex = re.compile('([a-zA-Z0-9_]/)*\.(bmp|txt|npl|ol|ptl|map|avi|flh)')
 
 def check():
-    linenumber = 0
+    global linenumber
     regex = re.compile("^[^\s;}{]\w*\s*[^}{;/]+") # works almost perfectly
     with open(f) as cfg:
         lines = cfg.readlines()
-        linenumber+=1
         for line in lines:
+            linenumber+=1
             result = regex.match(line.strip())
             if result:
                 vset = result.group(0).split()
@@ -32,6 +33,8 @@ def check():
 
 def dochecks(line):
     confirmpath(line)
+    # rgb check
+    # other checks...
 
 def confirmpath(line):
 
@@ -53,35 +56,48 @@ def confirmpath(line):
 
             else: pass #colors.pc(joinpath, colors.FOREGROUND_LIGHT_RED)
 
+        #elif '::' in l: # nothing to bother with these
+        #    print l
+
+        elif ':' in l and not '::' in l: pass
+            #print l
+            #print
+
+        elif '|' in l: #pass # i'm getting really tired of your crap, cfg
+            stuff = l.split('|')
+            stuff = stuff[:-2]
+            # blar check length, if more than 1, do stuff
+            if islrrpath(stuff[0]):pass
+
         elif '.' in l:
-            if os.path.isfile(joinpath): # file exists, should be complete match
-                pass #colors.pc(joinpath, colors.FOREGROUND_LIGHT_GREEN)
-
-            else: pass #colors.pc(joinpath, colors.FOREGROUND_LIGHT_RED)
-
-        elif '::' in l: pass # more tweaking
-
-        elif ':' in l: pass # weeeeeee...
+            if not os.path.isfile(joinpath): pass
+                #displaylightwarning(line[0]+' -> '+l, "File does not exist. (No %s)" % line[0])
 
         else: # if we have one of those no-extension paths
             if os.path.isdir(joinpath):
-                colors.pc(l, colors.FOREGROUND_LIGHT_YELLOW)
                 gl = glob.glob(joinpath + '\\*.*')
                 if len(gl)==0:
+                    displaypossibleerror(line[0]+' -> '+l, "Missing resources?")
+            #else: pass # Ignore because the game seems to be fine without them
 
-                    print line[0] + " -> " + line[1]
-                    print gl
-            else: pass # Ignore because the game seems to be fine without them
+def isfile(f):
+    return os.path.isfile(f)
 
+def islrrpath(string):
+    if string.startswith(rootfolders):
+        return True # good enough for now
+
+def displaylightwarning(item, message):
+    colors.pc("[Warning] On line %i, %s: \n%s\n" % (linenumber, item, message), colors.FOREGROUND_YELLOW)
 
 def displaywarning(item, message):
-    colors.pc("[Warning] %s: %s" % (item, message), colors.FOREGROUND_LIGHT_YELLOW)
+    colors.pc("[Warning] On line %i, %s: \n%s\n" % (linenumber, item, message), colors.FOREGROUND_LIGHT_YELLOW)
 
 def displaypossibleerror(item, message):
-    colors.pc("[Possible Error] %s: %s" % (item, message), colors.FOREGROUND_RED)
+    colors.pc("[Possible Error] On line %i, %s: \n%s\n" % (linenumber, item, message), colors.FOREGROUND_RED)
 
 def displayerror(item, message):
-    colors.pc("[Error] %s: %s" % (item, message), colors.FOREGROUND_LIGHT_RED)
+    colors.pc("[Error] On line %i, %s: \n%s\n" % (linenumber, item, message), colors.FOREGROUND_LIGHT_RED)
 
 
 
