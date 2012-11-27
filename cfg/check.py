@@ -2,18 +2,25 @@ import sys
 import os
 import re
 import time
+from .. import colors
 
-#os.chdir(r"C:/Users/Daniel/Desktop/lrr") # TEMPORARY HACK
 f = os.path.join("C:/Users/Daniel/Desktop/lrr","Data/Lego.cfg")
 def check():
-    line = ""
+    line = "a"
     regex = re.compile("^[^\s;}]\w?\s*[^};]*") #BLARG
     with open(f) as cfg:
         while line is not None:
+            line = cfg.readlines()
+            print line
+            return
             line = cfg.readline().strip()
+
             result = regex.match(line)
             if result:
-                print len(result.group(0))
+                colors.pc(result.group(0), colors.FOREGROUND_GREEN)
                 #get folders in Data folder, match file locations, check if exists
+
             else:
-                print "NO:  " + line
+                colors.pc("NO:  " + line, colors.FOREGROUND_RED)
+    os.chdir(r"C:\Users\Daniel\Desktop\lrr") # TEMPORARY HACK
+    print os.listdir("Data")
