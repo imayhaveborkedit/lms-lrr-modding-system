@@ -51,6 +51,12 @@ def launchLRR():
 def preloadobserve():
     pc("Gathering environment varibles...", colors.FOREGROUND_GREEN)
 
+
+################################################################################
+
+def cleanup():
+    pass
+
 ################################################################################
 
 def pc(t, c = 0xf, nl = True):
@@ -78,7 +84,7 @@ def mainmenu():
 
         if r == 1: launchLRR()
         elif r == 2 or None: break
-
+    cleanup()
 ################################################################################
 
 def main():

@@ -6,10 +6,15 @@ import glob
 sys.path.append(os.path.normpath(os.path.join(sys.path[0],'..')))
 import color.colors as colors
 
+os.chdir(r"C:/Users/Daniel/Desktop/lrr") # TEMPORARY HACK
+f = os.path.join("C:/Users/Daniel/Desktop/lrr","Data/Lego.cfg") # TEMPORARY HACK
+
 linenumber = 0
 rootfolders = tuple(os.listdir("Data"))
-f = os.path.join("C:/Users/Daniel/Desktop/lrr","Data/Lego.cfg") # TEMPORARY HACK
 pathregex = re.compile('([a-zA-Z0-9_]/)*\.(bmp|txt|npl|ol|ptl|map|avi|flh)')
+rgbregex = re.compile('\d{1,3}:\d{1,3}:\d{1,3}')
+rgbrange = range(256)
+isfile = os.path.isfile
 
 def check():
     global linenumber
@@ -23,31 +28,29 @@ def check():
                 vset = result.group(0).split()
                 if len(vset) == 2:
                     dochecks(vset)
-                #colors.pc(result.group(0), colors.FOREGROUND_LIGHT_GREEN)
-                #colors.pc(vset, colors.FOREGROUND_GREEN)
+                """
+                colors.pc(result.group(0), colors.FOREGROUND_LIGHT_GREEN)
+                colors.pc(vset, colors.FOREGROUND_GREEN)
 
-            #else:pass
-                #colors.pc(line.strip(), colors.FOREGROUND_RED)
-                #lines.remove(line)
+            else:#pass
+                colors.pc(line.strip(), colors.FOREGROUND_RED)
+                lines.remove(line)"""
 
 
 def dochecks(line):
     confirmpath(line)
+    rgbcheck(line)
     # rgb check
     # other checks...
 
 def confirmpath(line):
-
-    # TEMPORARY HACK
-    os.chdir(r"C:\Users\Daniel\Desktop\lrr")
-
     # this should work when frozen and in the right dir though (main will not use higher functions when not in an LRR dir)
-    rootfolders = os.listdir("Data")
+    #rootfolders = os.listdir("Data")
 
     l = line[1]
     joinpath = os.path.join("Data", l)
 
-    if l.startswith(tuple(rootfolders)): # obvious first check
+    if l.startswith(rootfolders): # obvious first check
         if ',' in l: # put this aside for further testing
             if os.path.isfile(joinpath[:joinpath.index(',')]): # tweak path
                 #colors.pc(joinpath[:joinpath.index(',')], colors.FOREGROUND_LIGHT_GREEN, nl = False)
@@ -80,12 +83,15 @@ def confirmpath(line):
                     displaypossibleerror(line[0]+' -> '+l, "Missing resources?")
             #else: pass # Ignore because the game seems to be fine without them
 
-def isfile(f):
-    return os.path.isfile(f)
+def rgbcheck(line):
+    if "RGB" in line[0] and not line[0].endswith(('Min', 'Max')):
+        rgbparts = line[1].split(':')
+        for rgbpart in rgbparts:
+            if int(rgbpart) not in rgbrange:
+                displayerror(line[0] + "  " + line[1], "Invalid RGB value.")
 
-def islrrpath(string):
-    if string.startswith(rootfolders):
-        return True # good enough for now
+def islrrpath(string): # good enough for now
+    return string.startswith(rootfolders)
 
 def displaylightwarning(item, message):
     colors.pc("[Warning] On line %i, %s: \n%s\n" % (linenumber, item, message), colors.FOREGROUND_YELLOW)
@@ -98,7 +104,6 @@ def displaypossibleerror(item, message):
 
 def displayerror(item, message):
     colors.pc("[Error] On line %i, %s: \n%s\n" % (linenumber, item, message), colors.FOREGROUND_LIGHT_RED)
-
 
 
 
