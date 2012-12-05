@@ -60,9 +60,9 @@ def confirmpath(line):
         #elif '::' in l: # nothing to bother with these
         #    print l
 
-        elif ':' in l and not '::' in l: pass
-            #print l
-            #print
+        elif ':' in l and not '::' in l: #pass
+            print l
+            print
 
         elif '|' in l: #pass # i'm getting really tired of your crap, cfg
             stuff = l.split('|')
@@ -100,7 +100,9 @@ def displaypossibleerror(item, message):
 def displayerror(item, message):
     colors.pc("[Error] On line %i, %s: \n%s\n" % (linenumber, item, message), colors.FOREGROUND_LIGHT_RED)
 
-
+def testp():
+    print "asdf","herp",
+    print "jkasdfk"
 
 
 

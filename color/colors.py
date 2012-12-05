@@ -53,7 +53,7 @@ def get_csbi_attributes(handle):
 
 def pc(text, color, nl = True):
     ctypes.windll.kernel32.SetConsoleTextAttribute(handle, color)
-    print text,
+    sys.stdout.write(text)
     ctypes.windll.kernel32.SetConsoleTextAttribute(handle, reset)
     if nl: print ""
     sys.stdout.flush()

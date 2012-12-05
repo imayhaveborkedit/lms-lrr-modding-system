@@ -1,16 +1,15 @@
 import os
 import sys
 import subprocess
-
-import colors
-
+import time
+import color.colors as colors
 
 NAME = "LMS"
 VERSION = "0.0.0"
 SUBVERSION = " PRE ALPHA"
 DEBUG = True
 
-
+LMSREADY = False
 
 
 
@@ -27,6 +26,8 @@ def initLMS():
 
     pc("System online, initalizing interface...", colors.FOREGROUND_LIGHT_GREEN)
     initGUI()
+    global LMSREADY
+    LMSREADY = True
 
 def preloadchecks():
     pc("Running diagnostics...", colors.FOREGROUND_GREEN)
@@ -51,11 +52,10 @@ def launchLRR():
 def preloadobserve():
     pc("Gathering environment varibles...", colors.FOREGROUND_GREEN)
 
-
 ################################################################################
 
 def cleanup():
-    pass
+    colors.pc("\n * Powering down...", colors.FOREGROUND_GREEN)
 
 ################################################################################
 
@@ -76,21 +76,24 @@ def mainmenu():
         print;
         o = ["[1] Launch game","[2] Quit"]
 
-        [pc(oo) for oo in o]
+        [colors.pc(" "+oo, colors.FOREGROUND_WHITE) for oo in o]
 
         print "\n >",
-        try: r = sys.stdin.readline()[:-1]
+        sys.stdout.flush()
+        try: r = int(sys.stdin.readline()[:-1])
         except: r = None
 
         if r == 1: launchLRR()
         elif r == 2 or None: break
-    cleanup()
+
 ################################################################################
 
 def main():
     pc("Powering up LMS...", colors.FOREGROUND_GREEN)
     initLMS()
     mainmenu()
+    cleanup()
+    print "\n Good bye"
 
 if __name__ == '__main__':
     print NAME + " Version " + VERSION + SUBVERSION + "\n"
