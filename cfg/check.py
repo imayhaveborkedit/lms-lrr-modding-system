@@ -3,15 +3,14 @@ import os
 import re
 import time
 import glob
-sys.path.append(os.path.normpath(os.path.join(sys.path[0],'..')))
-import color.colors as colors
+from color import colors # ASDF PYTHON
 
 os.chdir(r"C:/Users/Daniel/Desktop/lrr") # TEMPORARY HACK
 f = os.path.join("C:/Users/Daniel/Desktop/lrr","Data/Lego.cfg") # TEMPORARY HACK
 
 linenumber = 0
 rootfolders = tuple(os.listdir("Data"))
-pathregex = re.compile('([a-zA-Z0-9_]/)*\.(bmp|txt|npl|ol|ptl|map|avi|flh)')
+pathregex = re.compile('([a-zA-Z0-9_]/)*\.(bmp|txt|npl|ol|ptl|map|avi|flh)', re.IGNORECASE)
 rgbregex = re.compile('\d{1,3}:\d{1,3}:\d{1,3}')
 rgbrange = range(256)
 isfile = os.path.isfile
@@ -40,7 +39,6 @@ def check():
 def dochecks(line):
     confirmpath(line)
     rgbcheck(line)
-    # rgb check
     # other checks...
 
 def confirmpath(line):
@@ -74,13 +72,13 @@ def confirmpath(line):
 
         elif '.' in l:
             if not os.path.isfile(joinpath): pass
-                #displaylightwarning(line[0]+' -> '+l, "File does not exist. (No %s)" % line[0])
+                #displaywarning(line[0]+' -> '+l, "File does not exist. (No %s)" % line[0])
 
         else: # if we have one of those no-extension paths
             if os.path.isdir(joinpath):
                 gl = glob.glob(joinpath + '\\*.*')
                 if len(gl)==0:
-                    displaypossibleerror(line[0]+' -> '+l, "Missing resources?")
+                    displaypossibleerror(line[0]+'  '+l, "Missing resources?")
             #else: pass # Ignore because the game seems to be fine without them
 
 def rgbcheck(line):
@@ -88,13 +86,10 @@ def rgbcheck(line):
         rgbparts = line[1].split(':')
         for rgbpart in rgbparts:
             if int(rgbpart) not in rgbrange:
-                displayerror(line[0] + "  " + line[1], "Invalid RGB value.")
+                displayerror(line[0]+'  '+line[1], "Invalid RGB value.")
 
 def islrrpath(string): # good enough for now
     return string.startswith(rootfolders)
-
-def displaylightwarning(item, message):
-    colors.pc("[Warning] On line %i, %s: \n%s\n" % (linenumber, item, message), colors.FOREGROUND_YELLOW)
 
 def displaywarning(item, message):
     colors.pc("[Warning] On line %i, %s: \n%s\n" % (linenumber, item, message), colors.FOREGROUND_LIGHT_YELLOW)
