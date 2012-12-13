@@ -17,7 +17,7 @@
 #Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import sys
-
+import os
 import wad
 
 def usage():
@@ -47,7 +47,7 @@ def main():
             wadfile.extract(sys.argv[3])
         except IOError, err:
             print err
-    
+
     if sys.argv[1] == 'p':
         print "Reading directory %s" % (sys.argv[3])
         try:
@@ -63,4 +63,40 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
+
+# End ogun code ################################################################
+
+#os.chdir(r"C:/Users/Daniel/Desktop/wad")
+
+def wad_extract(wadfile, outfolder=None):
+    if outfolder is None:
+        outfolder = os.path.normpath(os.path.join(os.path.dirname(wadfile), os.path.basename(wadfile)[:os.path.basename(wadfile).index('.')]))
+    print "Reading wad file %s" % (wadfile)
+    print "Extracting into %s" % (outfolder)
+    return
+
+    # Add support for one relative folder naming
+
+    try:
+        wadfile = wad.load(wadfile)
+    except IOError, err:
+        print err
+#        exit() # I'll have to figure out what to do later
+    print "Extracting into %s" % (outfolder)
+    try:
+        wadfile.extract(outfolder)
+    except IOError, err:
+        print err
+
+def wad_pack(wadfile, srcfolder):
+    print "Reading directory %s" % (srcfolder)
+    try:
+        wadfile = wad.fromdirectory(srcfolder)
+    except IOError, err:
+        print err
+        exit()
+    print "Saving WAD file %s" % (wadfile)
+    try:
+        wadfile.save(wadfile)
+    except IOError, err:
+        print err

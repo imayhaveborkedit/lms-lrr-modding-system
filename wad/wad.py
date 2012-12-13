@@ -129,7 +129,7 @@ class WadFile(object):
     def extract(self, dirname):
         """ Extract contents to a directory """
         if not os.path.exists(dirname):
-            raise IOError("Target directory does not exist")
+            os.makedirs(dirname)
         for ob in self._objects:
             obj = self._objects[ob]
             name = obj.name.replace('\\','/')
