@@ -3,6 +3,7 @@ import sys
 import subprocess
 import time
 import color.colors as colors
+import win32api
 
 NAME = "LMS"
 VERSION = "0.0.0"
@@ -16,7 +17,7 @@ LMSREADY = False
 ################################################################################
 
 def initGUI():
-    pd("GUI disabled temporarily.")
+    pd("GUI disabled (nonexistant).")
 
 ################################################################################
 
@@ -24,7 +25,7 @@ def initLMS():
     preloadobserve()
     preloadchecks()
 
-    pc("System online, initalizing interface...", colors.FOREGROUND_LIGHT_GREEN)
+    pc("System online, initalizing interface (but not really)...", colors.FOREGROUND_LIGHT_GREEN)
     initGUI()
     global LMSREADY
     LMSREADY = True
@@ -39,18 +40,20 @@ def preloadchecks():
     try:
         with open('LegoRR.exe') as f:
             pd("Executable located.")
-            pass
-    except BaseException as e:
-        pc("Game not found.  Aborting.", )
+    except BaseException, e:
+        pc("Game not found.  Aborting.")
 
 
 def launchLRR():
+    # Figure out how to get/set color depth, hopefully without needing qres
     p("Launching game...")
     subprocess.call([r"LegoRR.exe"])
     p("Game terminated.")
 
 def preloadobserve():
     pc("Gathering environment varibles...", colors.FOREGROUND_GREEN)
+    if 'Program Files' in os.getcwd():
+        pc("Warning: Running from Program Files folder.  Not advised.  [insert stuff/menu here]", colors.FOREGROUND_LIGHT_YELLOW)
 
 ################################################################################
 

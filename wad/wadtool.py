@@ -68,27 +68,26 @@ if __name__ == "__main__":
 
 #os.chdir(r"C:/Users/Daniel/Desktop/wad")
 
-def wad_extract(wadfile, outfolder=None):
+def extract(wadfile, outfolder=None):
     if outfolder is None:
         outfolder = os.path.normpath(os.path.join(os.path.dirname(wadfile), os.path.basename(wadfile)[:os.path.basename(wadfile).index('.')]))
     print "Reading wad file %s" % (wadfile)
-    print "Extracting into %s" % (outfolder)
-    return
-
-    # Add support for one relative folder naming
-
+    olddir = os.getcwd()
+    os.chdir(os.path.dirname(wadfile))
+    os.makedirs(outfolder)
     try:
         wadfile = wad.load(wadfile)
     except IOError, err:
         print err
-#        exit() # I'll have to figure out what to do later
+        return
     print "Extracting into %s" % (outfolder)
     try:
         wadfile.extract(outfolder)
     except IOError, err:
         print err
+    os.chdir(olddir)
 
-def wad_pack(wadfile, srcfolder):
+def pack(wadfile, srcfolder):
     print "Reading directory %s" % (srcfolder)
     try:
         wadfile = wad.fromdirectory(srcfolder)
