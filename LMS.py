@@ -31,11 +31,12 @@ def initLMS():
     LMSREADY = True
 
 def preloadchecks():
-    pc("Running diagnostics...", colors.FOREGROUND_GREEN)
-
+    pc("Running preload checks...", colors.FOREGROUND_GREEN)
     pd(os.getcwd())
     os.chdir(r"C:/Users/Daniel/Desktop/lrr") # TEMPORARY HACK
     pd(os.getcwd())
+
+    checkwads()
 
     try:
         with open('LegoRR.exe') as f:
@@ -54,6 +55,14 @@ def preloadobserve():
     pc("Gathering environment varibles...", colors.FOREGROUND_GREEN)
     if 'Program Files' in os.getcwd():
         pc("Warning: Running from Program Files folder.  Not advised.  [insert stuff/menu here]", colors.FOREGROUND_LIGHT_YELLOW)
+
+################################################################################
+
+def checkwads():
+    if os.path.exists("Data/Lego.cfg") and os.path.exists("Data/Levels/") and os.path.exists("Data/World/"):
+        # DO SOMETHING
+        pass
+
 
 ################################################################################
 

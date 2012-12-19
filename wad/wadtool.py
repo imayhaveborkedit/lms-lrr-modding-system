@@ -66,15 +66,16 @@ if __name__ == "__main__":
 
 # End ogun code ################################################################
 
-#os.chdir(r"C:/Users/Daniel/Desktop/wad")
-
 def extract(wadfile, outfolder=None):
     if outfolder is None:
         outfolder = os.path.normpath(os.path.join(os.path.dirname(wadfile), os.path.basename(wadfile)[:os.path.basename(wadfile).index('.')]))
     print "Reading wad file %s" % (wadfile)
     olddir = os.getcwd()
     os.chdir(os.path.dirname(wadfile))
-    os.makedirs(outfolder)
+    try:
+        print outfolder
+        os.makedirs(outfolder)
+    except: pass # folder already created or something
     try:
         wadfile = wad.load(wadfile)
     except IOError, err:
@@ -87,15 +88,22 @@ def extract(wadfile, outfolder=None):
         print err
     os.chdir(olddir)
 
-def pack(wadfile, srcfolder):
+def pack(srcfolder, outfile=None):
+    olddir = os.getcwd()
+    os.chdir(os.path.dirname(srcfolder))
+    if outfile is None:
+        outfile = os.path.normpath(srcfolder) + '.wad'
+    elif not outfile.lower().endswith('.wad'):
+        outfile += '.wad'
     print "Reading directory %s" % (srcfolder)
     try:
         wadfile = wad.fromdirectory(srcfolder)
     except IOError, err:
         print err
         exit()
-    print "Saving WAD file %s" % (wadfile)
+    print "Saving WAD file %s" % (outfile)
     try:
-        wadfile.save(wadfile)
+        wadfile.save(outfile)
     except IOError, err:
         print err
+    os.chdir(olddir)
