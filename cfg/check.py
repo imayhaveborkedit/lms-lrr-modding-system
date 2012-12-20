@@ -3,10 +3,9 @@ import os
 import re
 import time
 import glob
-from color import colors # ASDF PYTHON
+from color import colors
 
-os.chdir(r"C:/Users/Daniel/Desktop/lrr") # TEMPORARY HACK
-f = os.path.join("C:/Users/Daniel/Desktop/lrr","Data/Lego.cfg") # TEMPORARY HACK
+f = os.path.join("C:/Users/Daniel/Desktop/lrr-prime","Data/Lego.cfg") # TEMPORARY HACK
 
 linenumber = 0
 rootfolders = tuple(os.listdir("Data"))
@@ -18,7 +17,7 @@ isfile = os.path.isfile
 def check():
     global linenumber
     regex = re.compile("^[^\s;}{]\w*\s*[^}{;/]+") # works almost perfectly
-    with open(f) as cfg:
+    with open(f) as cfg: #change once implemented
         lines = cfg.readlines()
         for line in lines:
             linenumber+=1
@@ -28,11 +27,11 @@ def check():
                 if len(vset) == 2:
                     dochecks(vset)
                 """
-                colors.pc(result.group(0), colors.FOREGROUND_LIGHT_GREEN)
-                colors.pc(vset, colors.FOREGROUND_GREEN)
+                colors.color(result.group(0), color.FG_LIGHT_GREEN)
+                colors.color(vset, color.FG_GREEN)
 
             else:#pass
-                colors.pc(line.strip(), colors.FOREGROUND_RED)
+                colors.color(line.strip(), color.FG_RED)
                 lines.remove(line)"""
 
 
@@ -51,11 +50,11 @@ def confirmpath(line):
     if l.startswith(rootfolders): # obvious first check
         if ',' in l: # put this aside for further testing
             if os.path.isfile(joinpath[:joinpath.index(',')]): # tweak path
-                #colors.pc(joinpath[:joinpath.index(',')], colors.FOREGROUND_LIGHT_GREEN, nl = False)
-                #colors.pc('\b' + joinpath[joinpath.index(','):], colors.FOREGROUND_LIGHT_GREEN | colors.BACKGROUND_RED)
+                #colors.color(joinpath[:joinpath.index(',')], color.FG_LIGHT_GREEN, nl = False)
+                #colors.color('\b' + joinpath[joinpath.index(','):], color.FG_LIGHT_GREEN | color.BG_RED)
                 pass
 
-            else: pass #colors.pc(joinpath, colors.FOREGROUND_LIGHT_RED)
+            else: pass #colors.color(joinpath, color.FG_LIGHT_RED)
 
         #elif '::' in l: # nothing to bother with these
         #    print l
@@ -92,19 +91,13 @@ def islrrpath(string): # good enough for now
     return string.startswith(rootfolders)
 
 def displaywarning(item, message):
-    colors.pc("[Warning] On line %i, %s: \n%s\n" % (linenumber, item, message), colors.FOREGROUND_LIGHT_YELLOW)
+    colors.color("[Warning] On line %i, %s: \n%s\n" % (linenumber, item, message), color.FG_LIGHT_YELLOW)
 
 def displaypossibleerror(item, message):
-    colors.pc("[Possible Error] On line %i, %s: \n%s\n" % (linenumber, item, message), colors.FOREGROUND_RED)
+    colors.color("[Possible Error] On line %i, %s: \n%s\n" % (linenumber, item, message), color.FG_RED)
 
 def displayerror(item, message):
-    colors.pc("[Error] On line %i, %s: \n%s\n" % (linenumber, item, message), colors.FOREGROUND_LIGHT_RED)
-
-def testp():
-    print "asdf","herp",
-    print "jkasdfk"
-
-
+    colors.color("[Error] On line %i, %s: \n%s\n" % (linenumber, item, message), color.FG_LIGHT_RED)
 
 
 

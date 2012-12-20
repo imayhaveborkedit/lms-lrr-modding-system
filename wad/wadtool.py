@@ -107,3 +107,11 @@ def pack(srcfolder, outfile=None):
     except IOError, err:
         print err
     os.chdir(olddir)
+
+def checkwads(): # Add some output
+    ope = os.path.exists
+    if ope("Data/Lego.cfg") and ope("Data/Levels/") and ope("Data/World/"):
+        return True # Good enough I guess?
+
+def primewads():
+    pass

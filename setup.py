@@ -6,7 +6,7 @@ setup(
         'py2exe': {
             'bundle_files': 1,
             'compressed': True,
-            'optimize': 2
+            'optimize': 1
             }},
     console = [{'script': "LMS.py"}],
     zipfile = "LMS.dll",

@@ -2,14 +2,14 @@ import os
 import sys
 import subprocess
 import time
+import color
 import color.colors as colors
-import win32api
+from wad import wadtool
 
 NAME = "LMS"
 VERSION = "0.0.0"
-SUBVERSION = " PRE ALPHA"
+SUBVERSION = "SUPER DUPER NOT READY YET"
 DEBUG = True
-
 LMSREADY = False
 
 
@@ -25,70 +25,57 @@ def initLMS():
     preloadobserve()
     preloadchecks()
 
-    pc("System online, initalizing interface (but not really)...", colors.FOREGROUND_LIGHT_GREEN)
+    colors.pc("System online, initalizing interface (but not really)...", color.FG_LIGHT_GREEN)
     initGUI()
     global LMSREADY
     LMSREADY = True
 
 def preloadchecks():
-    pc("Running preload checks...", colors.FOREGROUND_GREEN)
+    colors.pc("Running preload checks...", color.FG_GREEN)
     pd(os.getcwd())
-    os.chdir(r"C:/Users/Daniel/Desktop/lrr") # TEMPORARY HACK
+    os.chdir(r"C:/Users/Daniel/Desktop/lrr-notprime") # TEMPORARY HACK
     pd(os.getcwd())
 
-    checkwads()
+    wadtool.checkwads()
 
     try:
         with open('LegoRR.exe') as f:
             pd("Executable located.")
     except BaseException, e:
-        pc("Game not found.  Aborting.")
+        colors.pc("Game not found.  Aborting.")
 
 
 def launchLRR():
     # Figure out how to get/set color depth, hopefully without needing qres
-    p("Launching game...")
+    color.info("Launching game...")
     subprocess.call([r"LegoRR.exe"])
-    p("Game terminated.")
+    color.info("Game terminated.")
 
 def preloadobserve():
-    pc("Gathering environment varibles...", colors.FOREGROUND_GREEN)
+    colors.pc("Gathering environment varibles...", color.FG_GREEN)
     if 'Program Files' in os.getcwd():
-        pc("Warning: Running from Program Files folder.  Not advised.  [insert stuff/menu here]", colors.FOREGROUND_LIGHT_YELLOW)
-
-################################################################################
-
-def checkwads():
-    if os.path.exists("Data/Lego.cfg") and os.path.exists("Data/Levels/") and os.path.exists("Data/World/"):
-        # DO SOMETHING
-        pass
-
+        colors.pc("Warning: Running from Program Files folder.  Not advised.  [insert stuff/menu here]", color.FG_LIGHT_YELLOW)
 
 ################################################################################
 
 def cleanup():
-    colors.pc("\n * Powering down...", colors.FOREGROUND_GREEN)
+    colors.color("\n * Powering down...", color.FG_GREEN)
 
 ################################################################################
 
-def pc(t, c = 0xf, nl = True):
-    t = " * " + str(t)
-    colors.pc(t,c, nl)
+
 
 def pd(i):
-    if DEBUG: colors.pc(" @ " + str(i), colors.FOREGROUND_CYAN)
-
-def p(i):
-    print " * " + str(i)
+    if DEBUG: colors.color(" @ " + str(i), color.FG_CYAN)
 
 ################################################################################
 
 def mainmenu():
     while True:
         print;
-        o = ["[1] Launch game","[2] Quit"]
+        o = ["[1] Launch game","[2] Prime WADs","[3] Quit"]
 
-        [colors.pc(" "+oo, colors.FOREGROUND_WHITE) for oo in o]
+        [colors.color(" "+oo, color.FG_WHITE) for oo in o]
 
         print "\n >",
         sys.stdout.flush()
@@ -96,17 +83,19 @@ def mainmenu():
         except: r = None
 
         if r == 1: launchLRR()
-        elif r == 2 or None: break
+        elif r == 2:
+            if wadtool.checkwads(): wadtool.primewads()
+        elif r == 3 or None: break
 
 ################################################################################
 
 def main():
-    pc("Powering up LMS...", colors.FOREGROUND_GREEN)
+    colors.pc("Powering up LMS...", color.FG_GREEN)
     initLMS()
     mainmenu()
     cleanup()
     print "\n Good bye"
 
 if __name__ == '__main__':
-    print NAME + " Version " + VERSION + SUBVERSION + "\n"
+    print NAME + " Version " + VERSION + ' ' + SUBVERSION + "\n"
     main()
