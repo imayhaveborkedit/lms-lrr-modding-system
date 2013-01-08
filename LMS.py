@@ -55,6 +55,7 @@ def preloadobserve():
     colors.pc("Gathering environment varibles...", color.FG_GREEN)
     if 'Program Files' in os.getcwd():
         colors.pc("Warning: Running from Program Files folder.  Not advised.  [insert stuff/menu here]", color.FG_LIGHT_YELLOW)
+    import install
 
 ################################################################################
 
