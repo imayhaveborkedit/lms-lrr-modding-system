@@ -13,7 +13,6 @@ DEBUG = True
 LMSREADY = False
 
 
-
 ################################################################################
 
 def initGUI():
@@ -63,8 +62,6 @@ def cleanup():
     colors.color("\n * Powering down...", color.FG_GREEN)
 
 ################################################################################
-
-
 
 def pd(i):
     if DEBUG: colors.color(" @ " + str(i), color.FG_CYAN)
