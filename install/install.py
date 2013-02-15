@@ -1,5 +1,6 @@
 import color
 import wmi
+import subprocess
 
 def check():
     c = wmi.WMI()
