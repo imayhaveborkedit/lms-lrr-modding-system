@@ -2,6 +2,7 @@ import os
 import sys
 import subprocess
 import time
+import shutil
 import color
 import color.colors as colors
 from wad import wadtool
@@ -48,10 +49,12 @@ def preloadchecks():
             pd("Executable located.")
     except BaseException, e:
         if not checkProgramFilesInstall():
-            colors.pc("Game not found.  I'm going to go now.  When there's a game then I can help you.")
+            colors.pc("""Game not found.  I'm going to go now.  When there's a game then I can help you.
+            I suggest you put this in the same folder as the exe, like you were told to do.""")
         else:
-            colors.pc("""You've got the game installed, but you shouldn't mess with that one.
-            You should leave the Program Files LRR alone, and copy it elsewhere for modding.
+            colors.pc("""You've got the game installed, but you shouldn't mess with the copy in Program
+            Files.  Usually you copy it else where for modding, so you have a clean copy
+            for when it inevitably breaks.  Your Desktop is usually a good place for it.
 
             Want me to do that for you?\n""", color.FG_LIGHT_YELLOW)
             print "[YES/no] ",
@@ -59,17 +62,13 @@ def preloadchecks():
             try: r = str(sys.stdin.readline()[:-1])
             except: r = None
             if 'yes' in r.lower() or r is None:
-                pass #copy game
+                # add testing for files
+                shutil.copytree(os.getcwd(), os.path.join(os.path.expanduser('~/Desktop/'), os.path.basename(os.getcwd())))
 
-def copyGameToDesktop():
-    pass
+
 
 def checkProgramFilesInstall():
-    if os.path.isfile(r"C:/Program Files (x86)/LEGO Media/Games/Rock Raiders/LegoRR.exe"):
-        return True
-    elif os.path.isfile(r"C:/Program Files/LEGO Media/Games/Rock Raiders/LegoRR.exe"):
-        return True
-
+    return r"C:/Program Files" in os.getcwd()
 
 
 def launchLRR():
