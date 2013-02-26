@@ -106,6 +106,7 @@ def mainmenu():
         if r == 1: launchLRR()
         elif r == 2:
             if wadtool.checkwads(): wadtool.primewads()
+            else: colors.pc("Wad check failed.", color.FG_YELLOW)
         elif r == 3 or None: break
 
 ################################################################################

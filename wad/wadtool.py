@@ -18,6 +18,8 @@
 
 import sys
 import os
+import shutil
+import glob
 import wad
 
 def usage():
@@ -108,10 +110,12 @@ def pack(srcfolder, outfile=None):
         print err
     os.chdir(olddir)
 
-def checkwads(): # Add some output
+def checkwads(): # Check if wads have already been primed.
     ope = os.path.exists
     if ope("Data/Lego.cfg") and ope("Data/Levels/") and ope("Data/World/"):
-        return True # Good enough I guess?
+        return False #need to improve this
 
 def primewads():
+    wads = glob.glob("LegoRR[0-9].wad")
+    print wads
     pass
