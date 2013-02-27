@@ -21,6 +21,8 @@ import os
 import shutil
 import glob
 import wad
+import color
+import color.colors as colors
 
 def usage():
     print """
@@ -72,10 +74,9 @@ def extract(wadfile, outfolder=None):
     if outfolder is None:
         outfolder = os.path.normpath(os.path.join(os.path.dirname(wadfile), os.path.basename(wadfile)[:os.path.basename(wadfile).index('.')]))
     print "Reading wad file %s" % (wadfile)
-    olddir = os.getcwd()
-    os.chdir(os.path.dirname(wadfile))
+    #olddir = os.getcwd()
+    #os.chdir(os.path.dirname(wadfile))
     try:
-        print outfolder
         os.makedirs(outfolder)
     except: pass # folder already created or something
     try:
@@ -88,7 +89,7 @@ def extract(wadfile, outfolder=None):
         wadfile.extract(outfolder)
     except IOError, err:
         print err
-    os.chdir(olddir)
+    #os.chdir(olddir)
 
 def pack(srcfolder, outfile=None):
     olddir = os.getcwd()
@@ -110,12 +111,16 @@ def pack(srcfolder, outfile=None):
         print err
     os.chdir(olddir)
 
-def checkwads(): # Check if wads have already been primed.
+def checkwads():
+    """Check if wads have already been primed."""
     ope = os.path.exists
-    if ope("Data/Lego.cfg") and ope("Data/Levels/") and ope("Data/World/"):
-        return False #need to improve this
+    return ope("Data/Lego.cfg") and ope("Data/Levels/") and ope("Data/World/")
+
 
 def primewads():
     wads = glob.glob("LegoRR[0-9].wad")
-    print wads
-    pass
+    try: os.mkdir("WadBackup")
+    except: pass
+    for wfile in wads:
+        extract(wfile, outfolder="Data/")
+        shutil.move(wfile, "WadBackup/")
