@@ -116,7 +116,6 @@ def checkwads():
     ope = os.path.exists
     return ope("Data/Lego.cfg") and ope("Data/Levels/") and ope("Data/World/")
 
-
 def primewads():
     wads = glob.glob("LegoRR[0-9].wad")
     try: os.mkdir("WadBackup")

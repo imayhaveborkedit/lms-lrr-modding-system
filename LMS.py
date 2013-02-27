@@ -37,12 +37,13 @@ def preloadobserve():
 
 def preloadchecks():
     colors.pc("Running preload checks...", color.FG_GREEN)
+
     pd(os.getcwd())
     pd("Cheating, moving to")
     os.chdir(r"C:/Users/Daniel/Desktop/lrr-notprime") # TEMPORARY HACK
     pd(os.getcwd())
 
-    wadtool.checkwads()
+    wadtool.checkwads() # uh...
 
     try:
         with open('LegoRR.exe') as f:

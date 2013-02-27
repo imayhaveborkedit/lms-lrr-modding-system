@@ -28,4 +28,5 @@ def check():
 
 
 def install(drive, location=None):
+    # Extract resources
     pass
