@@ -91,10 +91,10 @@ def islrrpath(string): # good enough for now
     return string.startswith(rootfolders)
 
 def displaywarning(item, message):
-    colors.color("[Warning] On line %i, %s: \n%s\n" % (linenumber, item, message), color.FG_LIGHT_YELLOW)
+    colors.color("[Warning] On line %i, %s: \n%s\n" % (linenumber, item, message), color.FG_YELLOW)
 
 def displaypossibleerror(item, message):
-    colors.color("[Possible Error] On line %i, %s: \n%s\n" % (linenumber, item, message), color.FG_RED)
+    colors.color("[Possible Error] On line %i, %s: \n%s\n" % (linenumber, item, message), color.FG_LIGHT_YELLOW)
 
 def displayerror(item, message):
     colors.color("[Error] On line %i, %s: \n%s\n" % (linenumber, item, message), color.FG_LIGHT_RED)

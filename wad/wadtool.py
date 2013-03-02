@@ -114,12 +114,13 @@ def pack(srcfolder, outfile=None):
 def checkwads():
     """Check if wads have already been primed."""
     ope = os.path.exists
-    return ope("Data/Lego.cfg") and ope("Data/Levels/") and ope("Data/World/")
+    return (ope("Data/Lego.cfg") and ope("Data/Levels/") and ope("Data/World/"))
 
 def primewads():
     wads = glob.glob("LegoRR[0-9].wad")
-    try: os.mkdir("WadBackup")
+    try: os.mkdir("WADs")
     except: pass
     for wfile in wads:
         extract(wfile, outfolder="Data/")
-        shutil.move(wfile, "WadBackup/")
+        shutil.move(wfile, "WADs/")
+    return True

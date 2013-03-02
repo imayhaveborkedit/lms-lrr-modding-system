@@ -1,6 +1,9 @@
-import color
+import sys
 import wmi
 import subprocess
+import zipfile
+import color
+import color.colors as colors
 
 def check():
     c = wmi.WMI()
@@ -21,12 +24,19 @@ def check():
         else:
             colors.color(vname, color.FG_LIGHT_RED)
 
-
     if drive is not None:
         install(drive)
-    else: pass # prompt for stuff if needed
+    else:
+        print "something something ask user"
 
 
 def install(drive, location=None):
-    # Extract resources
-    pass
+    if hasattr(sys,"frozen") and sys.frozen in ("windows_exe", "console_exe"):
+        extractresources()
+
+
+
+def extractresources():
+    zipf = zipfile.ZipFile(sys.executable)
+    res = ["d3drm.dll", "i5comp.exe","ZD51145.DLL"]
+    [zipf.extract(r) for r in res]

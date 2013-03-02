@@ -15,6 +15,7 @@
 #Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #MA  02110-1301, USA.
 
+import sys
 import os
 import os.path
 import struct
@@ -131,6 +132,8 @@ class WadFile(object):
         if not os.path.exists(dirname):
             os.makedirs(dirname)
         for ob in self._objects:
+            sys.stdout.write(ob + '\r')
+            sys.stdout.flush()
             obj = self._objects[ob]
             name = obj.name.replace('\\','/')
             dir, name = os.path.split(name)
@@ -141,6 +144,9 @@ class WadFile(object):
             f.write(obj.data)
             f.close()
             obj.unload()
+            sys.stdout.write(" " * len(ob) + "\r")
+            sys.stdout.flush()
+
 
     def save(self, wadname):
         """ Save to a wadfile """

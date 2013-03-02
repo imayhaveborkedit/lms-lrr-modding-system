@@ -3,6 +3,7 @@ import sys
 import subprocess
 import time
 import shutil
+import game
 import color
 import color.colors as colors
 from wad import wadtool
@@ -12,6 +13,7 @@ VERSION = "0.0.0"
 SUBVERSION = "SUPER DUPER NOT READY YET"
 DEBUG = True
 LMSREADY = False
+WADSAREPRIME = False
 
 ## GUI STUFF ###################################################################
 
@@ -33,28 +35,28 @@ def preloadobserve():
     colors.pc("Gathering environment varibles...", color.FG_GREEN)
     if 'Program Files' in os.getcwd():
         colors.pc("Warning: Running from Program Files folder.  Not advised.  [insert stuff/menu here]", color.FG_LIGHT_YELLOW)
-    import install
+    #import install.install
+    #install.install.check()
+    # lolololol ^
 
 def preloadchecks():
     colors.pc("Running preload checks...", color.FG_GREEN)
 
     pd(os.getcwd())
     pd("Cheating, moving to")
-    os.chdir(r"C:/Users/Daniel/Desktop/lrr-notprime") # TEMPORARY HACK
+    if DEBUG: os.chdir(r"C:/Users/Daniel/Desktop/lrr-notprime") # TEMPORARY HACK
     pd(os.getcwd())
-
-    wadtool.checkwads() # uh...
 
     try:
         with open('LegoRR.exe') as f:
             pd("Executable located.")
     except BaseException, e:
-        if not checkProgramFilesInstall():
+        if not r"C:/Program Files" in os.getcwd():
             colors.pc("""Game not found.  I'm going to go now.  When there's a game then I can help you.
             I suggest you put this in the same folder as the exe, like you were told to do.""")
         else:
             colors.pc("""You've got the game installed, but you shouldn't mess with the copy in Program
-            Files.  Usually you copy it else where for modding, so you have a clean copy
+            Files.  Usually you copy it elsewhere for modding, so you have a clean copy
             for when it inevitably breaks.  Your Desktop is usually a good place for it.
 
             Want me to do that for you?\n""", color.FG_LIGHT_YELLOW)
@@ -65,25 +67,14 @@ def preloadchecks():
             if 'yes' in r.lower() or r is None:
                 # add testing for files
                 shutil.copytree(os.getcwd(), os.path.join(os.path.expanduser('~/Desktop/'), os.path.basename(os.getcwd())))
-
-
-
-def checkProgramFilesInstall():
-    return r"C:/Program Files" in os.getcwd()
-
-
-def launchLRR():
-    # Figure out how to get/set color depth, hopefully without needing qres
-    # Probably will need qres
-    color.info("Launching game...")
-    subprocess.call([r"LegoRR.exe"])
-    color.info("Game terminated.")
+    global WADSAREPRIME
+    WADSAREPRIME = wadtool.checkwads()
 
 
 ## SHUTDOWN STUFF ##############################################################
 
 def cleanup():
-    colors.color("\n * Powering down...", color.FG_GREEN)
+    colors.color(" * Powering down...", color.FG_GREEN)
 
 ## blar ########################################################################
 
@@ -93,22 +84,43 @@ def pd(i):
 ## MAIN MENU, WILL BE REPLACED BY GUI ##########################################
 
 def mainmenu():
+    global WADSAREPRIME
     while True:
         print;
-        o = ["[1] Launch game","[2] Prime WADs","[3] Quit"]
+        o = []
 
-        [colors.color(" "+oo, color.FG_WHITE) for oo in o]
+        print " Game: ",
+        if LMSREADY: colors.color("Ready", color.FG_LIGHT_GREEN); o += ["Launch LRR"]
+        else: colors.color("Not ready", color.FG_LIGHT_RED)
+
+        print " WADs: ",
+        if WADSAREPRIME: colors.color("Primed for Data Method", color.FG_LIGHT_GREEN)
+        else: colors.color("Not primed.", color.FG_LIGHT_YELLOW); o += ["Prime WADs"]
+
+        print;
+        o += ["Quit"]
+
+        for opt in range(len(o)):
+            print " [%d] %s" % (opt+1, o[opt])
 
         print "\n >",
         sys.stdout.flush()
         try: r = int(sys.stdin.readline()[:-1])
         except: r = None
+        print;
 
-        if r == 1: launchLRR()
-        elif r == 2:
-            if not wadtool.checkwads(): wadtool.primewads()
-            else: colors.pc("Wad check failed.", color.FG_YELLOW)
-        elif r == 3 or None: break
+        try:
+            selected = o[r-1]
+        except: selected = 0
+
+        if not selected:
+            print "Wut?"
+        else:
+            if selected == "Launch LRR": game.run.launchLRR()
+            elif selected == "Prime WADs":
+                if not wadtool.checkwads(): WADSAREPRIME = wadtool.primewads()
+                else: colors.color("Wad check failed.", color.FG_YELLOW)
+            elif selected == "Quit" or r is None: break
 
 ################################################################################
 

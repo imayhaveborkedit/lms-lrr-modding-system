@@ -6,9 +6,10 @@ setup(
         'py2exe': {
             'bundle_files': 1,
             'compressed': True,
-            'optimize': 1
+            'optimize': 1,
+            'dll_excludes': ['w9xpopen.exe'],
             }},
     console = [{'script': "LMS.py"}],
-    #data_files=[("utils",["install/d3drm.dll", "install/i5comp.exe","install/ZD51145.DLL"])],
+    #data_files=[("",["install/d3drm.dll", "install/i5comp.exe","install/ZD51145.DLL"])],
     zipfile = None,
 )
