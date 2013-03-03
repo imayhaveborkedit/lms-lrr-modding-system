@@ -3,15 +3,17 @@ import sys
 import subprocess
 import time
 import shutil
+import textwrap
+import zipfile
 import game
 import color
 import color.colors as colors
 from wad import wadtool
 
 NAME = "LMS"
-VERSION = "0.0.0"
-SUBVERSION = "SUPER DUPER NOT READY YET"
-DEBUG = True
+VERSION = "0.1.0"
+SUBVERSION = "EXTREME TEST EDITION"
+DEBUG = False
 LMSREADY = False
 WADSAREPRIME = False
 
@@ -19,17 +21,18 @@ WADSAREPRIME = False
 
 def initGUI():
     pd("GUI disabled (nonexistant).")
+    # program should probably terminate if this loads properly.
 
 ## INITALIATION STUFF ##########################################################
 
 def initLMS():
-    preloadobserve()
-    preloadchecks()
-
-    colors.pc("System online, initalizing interface (but not really)...", color.FG_LIGHT_GREEN)
-    initGUI()
     global LMSREADY
     LMSREADY = True
+    preloadobserve()
+    preloadchecks()
+    if LMSREADY:
+        colors.pc("System online, initalizing interface (but not really)...", color.FG_LIGHT_GREEN)
+        initGUI()
 
 def preloadobserve():
     colors.pc("Gathering environment varibles...", color.FG_GREEN)
@@ -50,16 +53,27 @@ def preloadchecks():
     try:
         with open('LegoRR.exe') as f:
             pd("Executable located.")
+            global WADSAREPRIME
+            WADSAREPRIME = wadtool.checkwads()
+            if hasattr(sys,"frozen") and sys.frozen in ("windows_exe", "console_exe"):
+                zipf = zipfile.ZipFile(sys.executable)
+                zipf.extract("d3drm.dll")
     except BaseException, e:
+        global LMSREADY
+        LMSREADY = False
         if not r"C:/Program Files" in os.getcwd():
-            colors.pc("""Game not found.  I'm going to go now.  When there's a game then I can help you.
-            I suggest you put this in the same folder as the exe, like you were told to do.""")
+            print ""
+            tex = textwrap.wrap("Game not found.  I'm going to go now. "+
+            "I suggest you put this in the same folder as the exe, like you were told to do.")
+            for t in tex: print " " + t
         else:
-            colors.pc("""You've got the game installed, but you shouldn't mess with the copy in Program
-            Files.  Usually you copy it elsewhere for modding, so you have a clean copy
-            for when it inevitably breaks.  Your Desktop is usually a good place for it.
+            tex = textwrap.wrap(
+            "You've got the game installed, but you shouldn't mess with the copy in Program"+
+            "Files.  Usually you copy it elsewhere for modding, so you have a clean copy"+
+            "for when it inevitably breaks.  Your Desktop is usually a good place for it.\n"+
+            "Want me to do that for you?\n")
+            for t in tex: print " " + t
 
-            Want me to do that for you?\n""", color.FG_LIGHT_YELLOW)
             print "[YES/no] ",
             sys.stdout.flush()
             try: r = str(sys.stdin.readline()[:-1])
@@ -67,8 +81,7 @@ def preloadchecks():
             if 'yes' in r.lower() or r is None:
                 # add testing for files
                 shutil.copytree(os.getcwd(), os.path.join(os.path.expanduser('~/Desktop/'), os.path.basename(os.getcwd())))
-    global WADSAREPRIME
-    WADSAREPRIME = wadtool.checkwads()
+        #return
 
 
 ## SHUTDOWN STUFF ##############################################################
@@ -90,12 +103,16 @@ def mainmenu():
         o = []
 
         print " Game: ",
-        if LMSREADY: colors.color("Ready", color.FG_LIGHT_GREEN); o += ["Launch LRR"]
+        if LMSREADY:
+            colors.color("Ready", color.FG_LIGHT_GREEN); o += ["Launch LRR"]
+
+            print " WADs: ",
+            if WADSAREPRIME: colors.color("Primed for Data Method", color.FG_LIGHT_GREEN)
+            else: colors.color("Not primed.", color.FG_LIGHT_YELLOW); o += ["Prime WADs"]
+
         else: colors.color("Not ready", color.FG_LIGHT_RED)
 
-        print " WADs: ",
-        if WADSAREPRIME: colors.color("Primed for Data Method", color.FG_LIGHT_GREEN)
-        else: colors.color("Not primed.", color.FG_LIGHT_YELLOW); o += ["Prime WADs"]
+
 
         print;
         o += ["Quit"]
@@ -112,9 +129,9 @@ def mainmenu():
         try:
             selected = o[r-1]
         except: selected = 0
-
+        cls()
         if not selected:
-            print "Wut?"
+            print " Wut?"
         else:
             if selected == "Launch LRR": game.run.launchLRR()
             elif selected == "Prime WADs":
@@ -122,14 +139,17 @@ def mainmenu():
                 else: colors.color("Wad check failed.", color.FG_YELLOW)
             elif selected == "Quit" or r is None: break
 
+
 ################################################################################
+
+def cls():
+    os.system(['clear','cls'][os.name == 'nt'])
 
 def main():
     colors.pc("Powering up LMS...", color.FG_GREEN)
     initLMS()
     mainmenu()
     cleanup()
-    print "\n Good bye"
 
 if __name__ == '__main__':
     print NAME + " Version " + VERSION + ' ' + SUBVERSION + "\n"
