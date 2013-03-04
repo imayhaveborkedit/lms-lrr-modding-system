@@ -170,3 +170,5 @@ test/
 *.dll
 *.DLL
 *.java
+*.ico
+*.png

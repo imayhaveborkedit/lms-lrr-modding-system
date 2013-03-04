@@ -55,9 +55,10 @@ def preloadchecks():
             pd("Executable located.")
             global WADSAREPRIME
             WADSAREPRIME = wadtool.checkwads()
-            if hasattr(sys,"frozen") and sys.frozen in ("windows_exe", "console_exe"):
-                zipf = zipfile.ZipFile(sys.executable)
-                zipf.extract("d3drm.dll")
+            if os.path.exists("d3drm.dll"):
+                if hasattr(sys,"frozen") and sys.frozen in ("windows_exe", "console_exe"):
+                    zipf = zipfile.ZipFile(sys.executable)
+                    zipf.extract("d3drm.dll")
     except BaseException, e:
         global LMSREADY
         LMSREADY = False
@@ -147,8 +148,21 @@ def cls():
 
 def main():
     colors.pc("Powering up LMS...", color.FG_GREEN)
-    initLMS()
-    mainmenu()
+
+    try:
+        initLMS()
+    except e:
+        print "Something bad has happened, due most likely to my ineptitude."
+        print "This is what happened.  Paste this in the LMS topic or otherwise tell Doc."
+        print "\n"+e
+
+    try:
+        mainmenu()
+    except e:
+        print "Something bad has happened, due most likely to my ineptitude."
+        print "This is what happened.  Paste this in the LMS topic or otherwise tell Doc."
+        print "\n"+e
+
     cleanup()
 
 if __name__ == '__main__':

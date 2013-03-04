@@ -8,9 +8,10 @@ setup(
             'compressed': True,
             'optimize': 1,
             'dll_excludes': ['w9xpopen.exe'],
+            'excludes':['email']
             }},
-    console = [{'script': "LMS.py"}],
-    #data_files=[("",["install/d3drm.dll", "install/i5comp.exe","install/ZD51145.DLL"])],
+    console = [{'script': 'LMS.py','icon_resources': [(1, 'LMSicon32.ico')]}],
+    #data_files=['install/d3drm.dll', 'install/i5comp.exe','install/ZD51145.DLL'],
     version = '0.1.0',
     zipfile = None,
 )
