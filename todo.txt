@@ -1,0 +1,9 @@
+Finish alternate install code
+Overhaul mode
+Manual wad interaction
+Start registry code
+Cafeteria support
+...
+
+GUI
+Patching/checking

@@ -5,13 +5,13 @@ import time
 import shutil
 import textwrap
 import zipfile
-import game
 import color
 import color.colors as colors
 from wad import wadtool
+import game
 
 NAME = "LMS"
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 SUBVERSION = "EXTREME TEST EDITION"
 DEBUG = False
 LMSREADY = False
@@ -21,7 +21,8 @@ WADSAREPRIME = False
 
 def initGUI():
     pd("GUI disabled (nonexistant).")
-    # program should probably terminate if this loads properly.
+    # program should probably terminate if this fails to loads properly.
+    # maybe CLI fallback
 
 ## INITALIATION STUFF ##########################################################
 

@@ -30,8 +30,5 @@ def pc(t, c = 0xf, nl = True):
     t = " * " + str(t)
     color(t,c, nl)
 
-def debug():
-    pass # Figure out how to get stupid LMS vars
-
 def info(i):
     print " * " + str(i)

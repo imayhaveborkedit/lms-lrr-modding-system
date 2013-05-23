@@ -1,10 +1,12 @@
 import color, color.colors as colors
 import subprocess
+import bitdepth
 
 def launchLRR():
-    # Figure out how to get/set color depth, hopefully without needing qres
-    # Probably will need qres
-    # I might not need to if Cyrem's tool works as expected.
+    print " Changing bitdepth..."
+    bitdepth.set_16()
     print " Launching game..."
     subprocess.call([r"LegoRR.exe"])
-    print " Game terminated."
+    print " Game terminated, restoring bitdepth..."
+    bitdepth.restore()
+    print " Bitdepth restored."
