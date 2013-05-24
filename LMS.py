@@ -47,9 +47,10 @@ def preloadchecks():
     colors.pc("Running preload checks...", color.FG_GREEN)
 
     pd(os.getcwd())
-    pd("Cheating, moving to")
-    if DEBUG: os.chdir(r"C:/Users/Daniel/Desktop/lrr-notprime") # TEMPORARY HACK
-    pd(os.getcwd())
+    if DEBUG:
+        pd("Cheating, moving to")
+        os.chdir(r"C:/Users/Daniel/Desktop/lrr-notprime") # TEMPORARY HACK
+        pd(os.getcwd())
 
     try:
         with open('LegoRR.exe') as f:
@@ -96,31 +97,33 @@ def cleanup():
 def pd(i):
     if DEBUG: colors.color(" @ " + str(i), color.FG_CYAN)
 
-## MAIN MENU, WILL BE REPLACED BY GUI ##########################################
+## MAIN MENU, WILL BE REPLACED BY GUI ## PROBABLY ##############################
 
 def mainmenu():
     global WADSAREPRIME
     while True:
         print;
-        o = []
+        o = {}
 
         print " Game: ",
         if LMSREADY:
-            colors.color("Ready", color.FG_LIGHT_GREEN); o += ["Launch LRR"]
+            colors.color("Ready", color.FG_LIGHT_GREEN)
+            o["Launch LRR"] = launchGame
 
             print " WADs: ",
-            if WADSAREPRIME: colors.color("Primed for Data Method", color.FG_LIGHT_GREEN)
-            else: colors.color("Not primed.", color.FG_LIGHT_YELLOW); o += ["Prime WADs"]
+            if WADSAREPRIME:
+                colors.color("Primed for Data Method", color.FG_LIGHT_GREEN)
+            else:
+                colors.color("Not primed.", color.FG_LIGHT_YELLOW)
+                o["Prime WADs"] = primeWADs
 
         else: colors.color("Not ready", color.FG_LIGHT_RED)
 
-
-
         print;
-        o += ["Quit"]
+        o["Quit"] = None
 
         for opt in range(len(o)):
-            print " [%d] %s" % (opt+1, o[opt])
+            print " [%d] %s" % (opt+1, o.keys()[opt])
 
         print "\n >",
         sys.stdout.flush()
@@ -130,16 +133,23 @@ def mainmenu():
 
         try:
             selected = o[r-1]
-        except: selected = 0
+        except:
+            break
+
         cls()
-        if not selected:
+
+        try:
+            o.values()[selected]()
+        except e:
             print " Wut?"
-        else:
-            if selected == "Launch LRR": game.run.launchLRR()
-            elif selected == "Prime WADs":
-                if not wadtool.checkwads(): WADSAREPRIME = wadtool.primewads()
-                else: colors.color("Wad check failed.", color.FG_YELLOW)
-            elif selected == "Quit" or r is None: break
+            break
+
+def launchGame():
+    game.run.launchLRR() # add option for Cafeteria
+
+def primeWADs():
+    if not wadtool.checkwads(): WADSAREPRIME = wadtool.primewads()
+    else: colors.color("Wad check failed.", color.FG_YELLOW)
 
 
 ################################################################################
