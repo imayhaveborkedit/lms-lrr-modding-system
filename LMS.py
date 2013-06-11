@@ -1,10 +1,10 @@
 import os
 import sys
-import subprocess
 import time
 import shutil
 import textwrap
 import zipfile
+import bisect
 import color
 import color.colors as colors
 from wad import wadtool
@@ -39,9 +39,9 @@ def preloadobserve():
     colors.pc("Gathering environment varibles...", color.FG_GREEN)
     if 'Program Files' in os.getcwd():
         colors.pc("Warning: Running from Program Files folder.  Not advised.  [insert stuff/menu here]", color.FG_LIGHT_YELLOW)
-    #import install.install
-    #install.install.check()
-    # lolololol ^
+    #import install
+    #install.check()
+
 
 def preloadchecks():
     colors.pc("Running preload checks...", color.FG_GREEN)
@@ -67,7 +67,7 @@ def preloadchecks():
         if not r"C:/Program Files" in os.getcwd():
             print ""
             tex = textwrap.wrap("Game not found.  I'm going to go now. "+
-            "I suggest you put this in the same folder as the exe, like you were told to do.")
+            "I suggest you put this in the same folder as the Rock Raiders exe, like you were told to do.")
             for t in tex: print " " + t
         else:
             tex = textwrap.wrap(
@@ -139,6 +139,7 @@ def mainmenu():
         cls()
 
         try:
+            print "DOING THING"
             o.values()[selected]()
         except e:
             print " Wut?"
