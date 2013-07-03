@@ -4,7 +4,7 @@ import time
 import shutil
 import textwrap
 import zipfile
-import bisect
+import bisect #wtf py2exe
 import color
 import color.colors as colors
 from wad import wadtool
@@ -22,7 +22,8 @@ WADSAREPRIME = False
 def initGUI():
     pd("GUI disabled (nonexistant).")
     # program should probably terminate if this fails to loads properly.
-    # maybe CLI fallback
+
+
 
 ## INITALIATION STUFF ##########################################################
 
@@ -91,6 +92,8 @@ def preloadchecks():
 
 def cleanup():
     colors.color(" * Powering down...", color.FG_GREEN)
+    # cleanup curses
+    # curses.nocbreak(); stdscr.keypad(0); curses.echo(); curses.endwin()
 
 ## blar ########################################################################
 
