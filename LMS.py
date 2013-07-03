@@ -9,7 +9,7 @@ import color
 import color.colors as colors
 from wad import wadtool
 import game
-import menu
+from helper import term, menu
 
 NAME = "LMS"
 VERSION = "0.1.2"
@@ -24,8 +24,6 @@ def initGUI():
     pd("GUI disabled (nonexistant).")
     # program should probably terminate if this fails to loads properly.
 
-
-
 ## INITALIATION STUFF ##########################################################
 
 def initLMS():
@@ -36,6 +34,7 @@ def initLMS():
     if LMSREADY:
         colors.pc("System online, initalizing interface (but not really)...", color.FG_LIGHT_GREEN)
         initGUI()
+
 
 def preloadobserve():
     colors.pc("Gathering environment varibles...", color.FG_GREEN)
@@ -69,7 +68,7 @@ def preloadchecks():
         if not r"C:/Program Files" in os.getcwd():
             print ""
             tex = textwrap.wrap("Game not found.  I'm going to go now. "+
-            "I suggest you put this in the same folder as the Rock Raiders exe, like you were told to do.")
+            "I suggest you put this in the same folder as the Rock Raiders exe, like you were told to do.\n")
             # add search function?
             for t in tex: print " " + t
             cleanup()
@@ -104,13 +103,12 @@ def cleanup():
 def pd(i):
     if DEBUG: colors.color(" @ " + str(i), color.FG_CYAN)
 
-## MAIN MENU, WILL BE REPLACED BY GUI ## PROBABLY ##############################
+## MAIN MENU, WILL BE REPLACED BY GUI ## PROBABLY ## MAYBE #####################
 
 def mainmenu():
     global WADSAREPRIME
     while True:
-        print;
-
+        print
         print " Game: ",
         if LMSREADY:
             colors.color("Ready", color.FG_LIGHT_GREEN)
@@ -121,8 +119,7 @@ def mainmenu():
                 colors.color("Not primed.", color.FG_LIGHT_YELLOW)
 
         else: colors.color("Not ready", color.FG_LIGHT_RED)
-
-        print;
+        print
 
         menu_main = menu.Menu([("Launch LRR", launchGame),("Prime WADs", primeWADs),("Quit", cleanup)])
         selectedopt = menu_main.open()
@@ -140,21 +137,23 @@ def primeWADs():
 ################################################################################
 
 def cls():
-    os.system(['clear','cls'][os.name == 'nt'])
+    os.system('cls')
 
 def main():
     colors.pc("Powering up LMS...", color.FG_GREEN)
-
     try:
         initLMS()
         mainmenu()
     except SystemExit: return
     except BaseException as e:
         print "Something bad has happened, due most likely to my ineptitude."
-        print "This is what happened.  Paste this in the LMS topic or otherwise tell Doc.\n"
-        print '*' * len(str(e))
+        print "This is what happened.  Paste this in the LMS topic or somehow tell Doc.\n"
+        print '*' * term.getX()
+        print
         print e
-        print '*' * len(str(e))
+        print
+        print '*' * term.getX()
+        print
 
     cleanup()
 

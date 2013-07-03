@@ -15,4 +15,4 @@ setup(
     version = LMS.VERSION,
     zipfile = None,
 )
-shutil.rmtree("/build")
+shutil.rmtree(r'C:\Users\Daniel\Documents\GitHub\lms-lrr-modding-system\build')
