@@ -1,5 +1,6 @@
 from distutils.core import setup
-import py2exe, sys, os
+import py2exe, sys, os, shutil
+import LMS
 sys.argv.append('py2exe')
 setup(
     options = {
@@ -11,8 +12,7 @@ setup(
             'excludes':['email']
             }},
     console = [{'script': 'LMS.py','icon_resources': [(1, 'LMSicon32.ico')]}],
-    #data_files=['install/d3drm.dll', 'install/i5comp.exe','install/ZD51145.DLL'],
-    # I needed an obscene ammount of hax to do this properly.
-    version = '0.1.1',
+    version = LMS.VERSION,
     zipfile = None,
 )
+shutil.rmtree("/build")

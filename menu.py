@@ -1,7 +1,7 @@
 from collections import OrderedDict
 import sys, types
 
-class Menu():
+class Menu(): # do something about funcs with args
     def __init__(self, optionlist):
         self.options = OrderedDict(optionlist).items()
         self.prefix = ''
@@ -50,6 +50,7 @@ class Menu():
 
     def _getmenuinput(self):
         print self.menutext()
+        # rewrite to allow for number OR text
         if self.defaultoption is not None:
             sys.stdout.write("[%d]: " % self.defaultoption)
         sys.stdout.flush()

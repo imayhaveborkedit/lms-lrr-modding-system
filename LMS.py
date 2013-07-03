@@ -9,9 +9,10 @@ import color
 import color.colors as colors
 from wad import wadtool
 import game
+import menu
 
 NAME = "LMS"
-VERSION = "0.1.1"
+VERSION = "0.1.2"
 SUBVERSION = "EXTREME TEST EDITION"
 DEBUG = False
 LMSREADY = False
@@ -69,7 +70,9 @@ def preloadchecks():
             print ""
             tex = textwrap.wrap("Game not found.  I'm going to go now. "+
             "I suggest you put this in the same folder as the Rock Raiders exe, like you were told to do.")
+            # add search function?
             for t in tex: print " " + t
+            cleanup()
         else:
             tex = textwrap.wrap(
             "You've got the game installed, but you shouldn't mess with the copy in Program"+
@@ -94,6 +97,7 @@ def cleanup():
     colors.color(" * Powering down...", color.FG_GREEN)
     # cleanup curses
     # curses.nocbreak(); stdscr.keypad(0); curses.echo(); curses.endwin()
+    sys.exit()
 
 ## blar ########################################################################
 
@@ -106,47 +110,25 @@ def mainmenu():
     global WADSAREPRIME
     while True:
         print;
-        o = {}
 
         print " Game: ",
         if LMSREADY:
             colors.color("Ready", color.FG_LIGHT_GREEN)
-            o["Launch LRR"] = launchGame
-
             print " WADs: ",
             if WADSAREPRIME:
                 colors.color("Primed for Data Method", color.FG_LIGHT_GREEN)
             else:
                 colors.color("Not primed.", color.FG_LIGHT_YELLOW)
-                o["Prime WADs"] = primeWADs
 
         else: colors.color("Not ready", color.FG_LIGHT_RED)
 
         print;
-        o["Quit"] = None
 
-        for opt in range(len(o)):
-            print " [%d] %s" % (opt+1, o.keys()[opt])
-
-        print "\n >",
-        sys.stdout.flush()
-        try: r = int(sys.stdin.readline()[:-1])
-        except: r = None
-        print;
-
-        try:
-            selected = o[r-1]
-        except:
-            break
+        menu_main = menu.Menu([("Launch LRR", launchGame),("Prime WADs", primeWADs),("Quit", cleanup)])
+        selectedopt = menu_main.open()
+        selectedopt()
 
         cls()
-
-        try:
-            print "DOING THING"
-            o.values()[selected]()
-        except e:
-            print " Wut?"
-            break
 
 def launchGame():
     game.run.launchLRR() # add option for Cafeteria
@@ -154,7 +136,6 @@ def launchGame():
 def primeWADs():
     if not wadtool.checkwads(): WADSAREPRIME = wadtool.primewads()
     else: colors.color("Wad check failed.", color.FG_YELLOW)
-
 
 ################################################################################
 
@@ -166,17 +147,14 @@ def main():
 
     try:
         initLMS()
-    except e:
-        print "Something bad has happened, due most likely to my ineptitude."
-        print "This is what happened.  Paste this in the LMS topic or otherwise tell Doc."
-        print "\n"+e
-
-    try:
         mainmenu()
-    except e:
+    except SystemExit: return
+    except BaseException as e:
         print "Something bad has happened, due most likely to my ineptitude."
-        print "This is what happened.  Paste this in the LMS topic or otherwise tell Doc."
-        print "\n"+e
+        print "This is what happened.  Paste this in the LMS topic or otherwise tell Doc.\n"
+        print '*' * len(str(e))
+        print e
+        print '*' * len(str(e))
 
     cleanup()
 
