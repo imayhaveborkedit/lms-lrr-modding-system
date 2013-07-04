@@ -14,7 +14,7 @@ from helper import term, menu
 NAME = "LMS"
 VERSION = "0.1.2"
 SUBVERSION = "EXTREME TEST EDITION"
-DEBUG = False
+DEBUG = True
 LMSREADY = False
 WADSAREPRIME = False
 
@@ -27,6 +27,9 @@ def initGUI():
 ## INITALIATION STUFF ##########################################################
 
 def initLMS():
+
+    #check for update
+
     global LMSREADY
     LMSREADY = True
     preloadobserve()
@@ -116,12 +119,15 @@ def mainmenu():
             if WADSAREPRIME:
                 colors.color("Primed for Data Method", color.FG_LIGHT_GREEN)
             else:
-                colors.color("Not primed.", color.FG_LIGHT_YELLOW)
+                colors.color("Not primed", color.FG_LIGHT_YELLOW)
 
         else: colors.color("Not ready", color.FG_LIGHT_RED)
         print
 
         menu_main = menu.Menu([("Launch LRR", launchGame),("Prime WADs", primeWADs),("Quit", cleanup)])
+        #menu_main.prefix = " "
+        menu_main.indent = 1
+        menu_main.prompt = ">"
         selectedopt = menu_main.open()
         selectedopt()
 

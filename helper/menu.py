@@ -7,7 +7,9 @@ class Menu(): # do something about funcs with args
         self.prefix = ''
         self.suffix = ''
         self.indent = 0
+        self.indentaffectsprompt = True
         self.prompt = ''
+        self.promptspacer = True
         self.defaultoption = None
         self.invalid = 'Invalid option.\n'
         self.repeatoninvalid = True
@@ -25,7 +27,7 @@ class Menu(): # do something about funcs with args
         menutext = ''
         pos = 1
         for option in self.options:
-            menutext += " " * int(4 * self.indent)
+            menutext += " " * int(self.indent)
             menutext += self.prefix + str(pos) + self.suffix + ": "
             menutext += str(option[0]) + "\n"
             pos += 1
@@ -50,9 +52,14 @@ class Menu(): # do something about funcs with args
 
     def _getmenuinput(self):
         print self.menutext()
+        if self.promptspacer: print
+        if self.indentaffectsprompt:
+            sys.stdout.write(' ' * self.indent)
+
         # rewrite to allow for number OR text
         if self.defaultoption is not None:
             sys.stdout.write("[%d]: " % self.defaultoption)
+        sys.stdout.write(self.prompt)
         sys.stdout.flush()
 
         try: o = int(sys.stdin.readline()[:-1])
@@ -71,20 +78,20 @@ class Menu(): # do something about funcs with args
         return optfunc
 
 
-def printtest1():
-    print "test 1 works"
-
-def printtest2():
-    print "test 2 works"
-
-def printtest3():
-    print "test 3 works"
-
-
-if __name__ == '__main__':
-    def asdfasfd(): pass
-    m = Menu([('Test 1',printtest1),('Test 2',"derp"),('Test 3',printtest3)])
-    m.defaultoption = 3
-    f = m.open()
-    if isinstance(f, basestring): print f
-    else: f()
+##def printtest1():
+##    print "test 1 works"
+##
+##def printtest2():
+##    print "test 2 works"
+##
+##def printtest3():
+##    print "test 3 works"
+##
+##
+##if __name__ == '__main__':
+##    def asdfasfd(): pass
+##    m = Menu([('Test 1',printtest1),('Test 2',"derp"),('Test 3',printtest3)])
+##    m.defaultoption = 3
+##    f = m.open()
+##    if isinstance(f, basestring): print f
+##    else: f()
