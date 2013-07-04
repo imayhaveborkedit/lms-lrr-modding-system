@@ -125,7 +125,6 @@ def mainmenu():
         print
 
         menu_main = menu.Menu([("Launch LRR", launchGame),("Prime WADs", primeWADs),("Quit", cleanup)])
-        #menu_main.prefix = " "
         menu_main.indent = 1
         menu_main.prompt = ">"
         selectedopt = menu_main.open()
