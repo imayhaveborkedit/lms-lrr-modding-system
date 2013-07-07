@@ -1,5 +1,5 @@
 from distutils.core import setup
-import py2exe, sys, os, shutil
+import py2exe, sys, os, shutil, zipfile
 import LMS
 sys.argv.append('py2exe')
 setup(
@@ -16,3 +16,8 @@ setup(
     zipfile = None,
 )
 shutil.rmtree(r'C:\Users\Daniel\Documents\GitHub\lms-lrr-modding-system\build')
+
+os.chdir('dist/')
+z = zipfile.ZipFile("LMS.zip", 'w')
+z.write('LMS.exe', compress_type=zipfile.ZIP_DEFLATED)
+z.close()

@@ -1,3 +1,4 @@
+import colors
 
 FG_BLACK         = 0x00
 FG_BLUE          = 0x01

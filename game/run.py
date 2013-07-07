@@ -1,6 +1,10 @@
-import color, color.colors as colors
 import subprocess
 import bitdepth
+from color import *
+
+# perhaps I should create a game object
+# creating the object defines the enviroment
+#
 
 def launchLRR():
     print " Changing bit depth..."
@@ -10,3 +14,8 @@ def launchLRR():
     print " Game terminated, restoring bit depth..."
     bitdepth.restore()
     print " Bit depth restored."
+
+
+def overhaul(pack):
+    #
+    pass

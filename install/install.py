@@ -2,8 +2,7 @@ import sys
 import wmi
 import subprocess
 import zipfile
-import color
-import color.colors as colors
+from color import *
 
 def check():
     c = wmi.WMI()
@@ -33,7 +32,6 @@ def check():
 def install(drive, location=None):
     if hasattr(sys,"frozen") and sys.frozen in ("windows_exe", "console_exe"):
         extractresources()
-
 
 
 def extractresources():

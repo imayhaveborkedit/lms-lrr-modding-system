@@ -5,18 +5,20 @@ import shutil
 import textwrap
 import zipfile
 import bisect #wtf py2exe
-import color
-import color.colors as colors
-from wad import wadtool
+
 import game
-from helper import term, menu
+from color import *
+from wad import wadtool
+from helper import term, menu, update
 
 NAME = "LMS"
-VERSION = "0.1.2"
-SUBVERSION = "EXTREME TEST EDITION"
-DEBUG = True
+VERSION = "0.1.4"
+SUBVERSION = "SUPER TEST EDITION"
+
 LMSREADY = False
 WADSAREPRIME = False
+
+DEBUG = False
 
 ## GUI STUFF ###################################################################
 
@@ -61,7 +63,7 @@ def preloadchecks():
             pd("Executable located.")
             global WADSAREPRIME
             WADSAREPRIME = wadtool.checkwads()
-            if os.path.exists("d3drm.dll"):
+            if not os.path.exists("d3drm.dll"):
                 if hasattr(sys,"frozen") and sys.frozen in ("windows_exe", "console_exe"):
                     zipf = zipfile.ZipFile(sys.executable)
                     zipf.extract("d3drm.dll")
@@ -127,6 +129,8 @@ def mainmenu():
         menu_main = menu.Menu([("Launch LRR", launchGame),("Prime WADs", primeWADs),("Quit", cleanup)])
         menu_main.indent = 1
         menu_main.prompt = ">"
+        menu_main.prefix = '['
+        menu_main.suffix = ']'
         selectedopt = menu_main.open()
         selectedopt()
 
@@ -159,9 +163,19 @@ def main():
         print
         print '*' * term.getX()
         print
-
     cleanup()
 
 if __name__ == '__main__':
     print NAME + " Version " + VERSION + ' ' + SUBVERSION + "\n"
-    main()
+    if update.checkupdate():
+        print "Update is available, updating..."
+        ok = update.update()
+        if not ok: print 'something is bork'
+    else:
+        print "No update."
+        try:
+            if sys.argv[1] == '--finalize-update':
+                print " Update complete.\n"
+                update.finalize()
+        except: pass
+        main()

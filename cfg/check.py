@@ -3,7 +3,7 @@ import os
 import re
 import time
 import glob
-from color import colors
+from color import *
 
 f = os.path.join("C:/Users/Daniel/Desktop/lrr-prime","Data/Lego.cfg") # TEMPORARY HACK
 

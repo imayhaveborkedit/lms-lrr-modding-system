@@ -21,8 +21,7 @@ import os
 import shutil
 import glob
 import wad
-import color
-import color.colors as colors
+from color import *
 
 def usage():
     print """

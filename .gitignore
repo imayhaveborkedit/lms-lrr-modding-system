@@ -172,3 +172,6 @@ test/
 *.java
 *.ico
 *.png
+
+helper/updater.py
+helper/setup.py
