@@ -1,6 +1,5 @@
 import subprocess
 import bitdepth
-from color import *
 
 # perhaps I should create a game object
 # creating the object defines the enviroment
