@@ -7,22 +7,17 @@ import distutils.file_util
 import distutils.dir_util
 import stat
 # Detect the CD
-# import wmi
-wmi = None
+import wmi
 
 # Extract the cab and resources
 import subprocess
 import zipfile
 
 # Colored text
-# from color import *
-color = None
+from color import *
 
 # Bit a fun. :)
 from random import choice
-
-#TODO: Clean up ALL  the code
-#TODO: Comment my code
 
 
 def select():
@@ -113,7 +108,7 @@ Your existing installation will be moved to
 {0}'''.format(new_location))
 
                 # Copy the installation
-                #TODO: Catch common error?
+                #TODO: Catch common errors?
                 distutils.dir_util.copy_tree(location, new_location)
                 # Display sucess message
                 print("\nBackup created sucessfully.")
@@ -230,7 +225,8 @@ def install(drive, location):
     # Display success message
     print('''
 LEGO Rock Raiders successfully installed to
-{0}'''.format(location))
+{0}
+'''.format(location))
 
     # Change the working directory back to LMS location
     os.chdir(os.path.dirname(sys.argv[0]))

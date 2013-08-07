@@ -180,3 +180,4 @@ test/
 helper/updater.py
 helper/setup.py
 install/Data.zip
+install/installufile.py
