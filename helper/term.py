@@ -14,7 +14,7 @@ def getTerminalSize():
         csbi = create_string_buffer(22)
         res = windll.kernel32.GetConsoleScreenBufferInfo(h, csbi)
     except:
-        return None
+        return [None, None]
     if res:
         (bufx, bufy, curx, cury, wattr,
          left, top, right, bottom, maxx, maxy) = struct.unpack("hhhhHhhhhhh", csbi.raw)
@@ -22,4 +22,4 @@ def getTerminalSize():
         sizey = bottom - top + 1
         return sizex, sizey
     else:
-        return None
+        return [None, None]
