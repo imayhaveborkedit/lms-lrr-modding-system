@@ -128,8 +128,14 @@ Your existing installation will be moved to
          # Copy the correct Exe and ICD
         distutils.file_util.copy_file(
             os.path.join(drive, "EXE", "LegoRR.exe"), location)
+
         distutils.file_util.copy_file(
             os.path.join(drive, "EXE", "LegoRR.icd"), location)
+
+        # Update permissions on the  Exe and ICD
+
+        os.chmod(os.path.join(drive, "EXE", "LegoRR.exe"), stat.S_IWRITE)
+        os.chmod(os.path.join(drive, "EXE", "LegoRR.icd"), stat.S_IWRITE)
 
 
 def check():
