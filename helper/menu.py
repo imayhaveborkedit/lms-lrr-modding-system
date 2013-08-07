@@ -1,7 +1,9 @@
 from collections import OrderedDict
-import sys, types
+import sys
+import types
 
-class Menu(): # do something about funcs with args
+
+class Menu():  # do something about funcs with args
     def __init__(self, optionlist):
         self.options = OrderedDict(optionlist).items()
         self.prefix = ''
@@ -20,10 +22,8 @@ class Menu(): # do something about funcs with args
             if not isinstance(opt[1], (types.FunctionType, types.MethodType, types.GeneratorType)):
                 raise TypeError(str(opt[1]) + " is not a function: " + str(type(opt[1]))[1:-1])
 
-
     def __repr__(self):
         return str(self.options)
-
 
     def menutext(self):
         menutext = ''
@@ -34,7 +34,6 @@ class Menu(): # do something about funcs with args
             menutext += str(option[0]) + "\n"
             pos += 1
         return menutext[:-1]
-
 
     def open(self):
         if self.repeatoninvalid:
@@ -50,10 +49,8 @@ class Menu(): # do something about funcs with args
             if self.executeonreturn: self._getmenuinput()()
             else: return self._getmenuinput()
 
-
     def doinvalidthing(self):
         print self.invalid
-
 
     def _getmenuinput(self):
         print self.menutext()
@@ -76,10 +73,9 @@ class Menu(): # do something about funcs with args
         if self.postpromtspacer: print
         return self.chooseoption(o)
 
-
     def chooseoption(self, optionnumber):
         try:
-            optfunc = self.options[optionnumber-1][1]
+            optfunc = self.options[optionnumber - 1][1]
         except (IndexError, TypeError) as e: return self.invalid
         return optfunc
 
@@ -87,14 +83,18 @@ class Menu(): # do something about funcs with args
 def printtest1():
     print "test 1 works"
 
+
 def printtest2():
     print "test 2 works"
+
 
 def printtest3():
     print "test 3 works"
 
+
 def testa():
     print "test a works"
+
 
 def testb():
     print "test b works"
@@ -102,8 +102,8 @@ def testb():
 
 if __name__ == '__main__':
     def asdfasfd(): pass
-    m2 = Menu([('Test a', testa),('Test b',testb)])
-    m = Menu([('Test 1',printtest1),('Test 2',printtest2),('Test 3',m2.open)])
+    m2 = Menu([('Test a', testa), ('Test b', testb)])
+    m = Menu([('Test 1', printtest1), ('Test 2', printtest2), ('Test 3', m2.open)])
     m.executeonreturn = True
     m2.executeonreturn = True
     m.defaultoption = 3

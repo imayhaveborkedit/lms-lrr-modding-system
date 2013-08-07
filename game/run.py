@@ -5,6 +5,7 @@ import bitdepth
 # creating the object defines the enviroment
 #
 
+
 def launchLRR():
     print " Changing bit depth..."
     bitdepth.set_16()

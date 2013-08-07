@@ -4,7 +4,7 @@ import time
 import shutil
 import textwrap
 import zipfile
-import bisect #wtf py2exe
+import bisect  # wtf py2exe
 
 import game
 from color import *
@@ -22,11 +22,13 @@ DEBUG = False
 
 ## GUI STUFF ###################################################################
 
+
 def initGUI():
     pd("GUI disabled (nonexistant).")
     # program should probably terminate if this fails to loads properly.
 
 ## INITALIATION STUFF ##########################################################
+
 
 def initLMS():
 
@@ -55,7 +57,7 @@ def preloadchecks():
     pd(os.getcwd())
     if DEBUG:
         pd("Cheating, moving to")
-        os.chdir(r"C:/Users/Daniel/Desktop/lrr-notprime") # TEMPORARY HACK
+        os.chdir(r"C:/Users/Daniel/Desktop/lrr-notprime")  # TEMPORARY HACK
         pd(os.getcwd())
 
     try:
@@ -64,7 +66,7 @@ def preloadchecks():
             global WADSAREPRIME
             WADSAREPRIME = wadtool.checkwads()
             if not os.path.exists("d3drm.dll"):
-                if hasattr(sys,"frozen") and sys.frozen in ("windows_exe", "console_exe"):
+                if hasattr(sys, "frozen") and sys.frozen in ("windows_exe", "console_exe"):
                     zipf = zipfile.ZipFile(sys.executable)
                     zipf.extract("d3drm.dll")
     except BaseException, e:
@@ -72,16 +74,16 @@ def preloadchecks():
         LMSREADY = False
         if not r"C:/Program Files" in os.getcwd():
             print ""
-            tex = textwrap.wrap("Game not found.  I'm going to go now. "+
+            tex = textwrap.wrap("Game not found.  I'm going to go now. " +
             "I suggest you put this in the same folder as the Rock Raiders exe, like you were told to do.\n")
             # add search function?
             for t in tex: print " " + t
             cleanup()
         else:
             tex = textwrap.wrap(
-            "You've got the game installed, but you shouldn't mess with the copy in Program"+
-            "Files.  Usually you copy it elsewhere for modding, so you have a clean copy"+
-            "for when it inevitably breaks.  Your Desktop is usually a good place for it.\n"+
+            "You've got the game installed, but you shouldn't mess with the copy in Program" +
+            "Files.  Usually you copy it elsewhere for modding, so you have a clean copy" +
+            "for when it inevitably breaks.  Your Desktop is usually a good place for it.\n" +
             "Want me to do that for you?\n")
             for t in tex: print " " + t
 
@@ -105,10 +107,12 @@ def cleanup():
 
 ## blar ########################################################################
 
+
 def pd(i):
     if DEBUG: colors.color(" @ " + str(i), color.FG_CYAN)
 
 ## MAIN MENU, WILL BE REPLACED BY GUI ## PROBABLY ## MAYBE #####################
+
 
 def mainmenu():
     global WADSAREPRIME
@@ -126,7 +130,7 @@ def mainmenu():
         else: colors.color("Not ready", color.FG_LIGHT_RED)
         print
 
-        menu_main = menu.Menu([("Launch LRR", launchGame),("Prime WADs", primeWADs),("Quit", cleanup)])
+        menu_main = menu.Menu([("Launch LRR", launchGame), ("Prime WADs", primeWADs), ("Quit", cleanup)])
         menu_main.indent = 1
         menu_main.prompt = ">"
         menu_main.prefix = '['
@@ -136,8 +140,10 @@ def mainmenu():
 
         cls()
 
+
 def launchGame():
-    game.run.launchLRR() # add option for Cafeteria
+    game.run.launchLRR()  # add option for Cafeteria
+
 
 def primeWADs():
     if not wadtool.checkwads(): WADSAREPRIME = wadtool.primewads()
@@ -145,8 +151,10 @@ def primeWADs():
 
 ################################################################################
 
+
 def cls():
     os.system('cls')
+
 
 def main():
     colors.pc("Powering up LMS...", color.FG_GREEN)
@@ -166,6 +174,8 @@ def main():
     cleanup()
 
 if __name__ == '__main__':
+    # Write window title
+    os.system("title {0} Version {1} {2}".format(NAME, VERSION, SUBVERSION)
     print NAME + " Version " + VERSION + ' ' + SUBVERSION + "\n"
     if update.checkupdate():
         print "Update is available, updating..."

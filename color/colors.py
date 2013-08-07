@@ -3,6 +3,7 @@ import ctypes
 
 STD_OUTPUT_HANDLE = -11
 
+
 def get_csbi_attributes(handle):
     import struct
     csbi = ctypes.create_string_buffer(22)
@@ -13,7 +14,8 @@ def get_csbi_attributes(handle):
     left, top, right, bottom, maxx, maxy) = struct.unpack("hhhhHhhhhhh", csbi.raw)
     return wattr
 
-def color(text, color, nl = True):
+
+def color(text, color, nl=True):
     ctypes.windll.kernel32.SetConsoleTextAttribute(handle, color)
     sys.stdout.write(text)
     ctypes.windll.kernel32.SetConsoleTextAttribute(handle, reset)
@@ -26,9 +28,10 @@ reset = get_csbi_attributes(handle)
 
 # more functions here
 
-def pc(t, c = 0xf, nl = True):
+def pc(t, c=0xf, nl=True):
     t = " * " + str(t)
-    color(t,c, nl)
+    color(t, c, nl)
+
 
 def info(i):
     print " * " + str(i)
