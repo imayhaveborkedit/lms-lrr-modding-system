@@ -47,7 +47,7 @@ Would you like to make a backup first? {0} '''.format(r"(Y\N)"))
 
             # Yes, they do want to backup their existing installation
             if move_install.lower() == "y":
-                print("\nWARNING: This may take a while")
+                print "\nWARNING: This may take a while"
 
                 # Used to copy an existing installation
                 count = 1
@@ -65,18 +65,18 @@ Would you like to make a backup first? {0} '''.format(r"(Y\N)"))
                     new_location = "{0} Install {1}".format(location, count)
 
                 # Tell user where the backup will be located
-                print('''
+                print '''
 Your existing installation will be moved to
-{0}'''.format(new_location))
+{0}'''.format(new_location)
 
                 # Copy the installation
                 #TODO: Catch common errors?
                 distutils.dir_util.copy_tree(location, new_location)
 
                 # Display success message
-                print("\nBackup created successfully")
+                print "\nBackup created successfully"
 
-                print("\nRemoving original installation")
+                print "\nRemoving original installation"
 
                 # Update permissions so we can remove it
                 permissions(location)
@@ -88,7 +88,7 @@ Your existing installation will be moved to
                 os.makedirs(location)
 
         # Copy the CAB and HDR from the disc to the installation path
-        print("\nCopying required files")
+        print "\nCopying required files"
         distutils.file_util.copy_file(
             os.path.join(drive, "data1.hdr"), location)
 
@@ -104,7 +104,7 @@ Your existing installation will be moved to
     elif not first:
 
         # Display near file installation
-        print("\nFinishing up installation")
+        print "\nFinishing up installation"
 
         # Change the permissions on the files
         permissions(location)
@@ -166,7 +166,7 @@ def check():
 
     # The disc title matched, this is a valid disc
     if drive is not None:
-        print("\nValid Rock Raiders disc detected")
+        print "\nValid Rock Raiders disc detected"
 
         # Where we will install the game
         location = os.path.join(os.path.expanduser("~"), "Desktop",
@@ -180,7 +180,7 @@ def check():
         install(drive, location)
 
     else:
-        print("\nCould not detect a valid Rock Raiders disc")
+        print "\nCould not detect a valid Rock Raiders disc"
         # Return False to denote failed installation
         return False
 
@@ -202,7 +202,7 @@ def install(drive, location):
     os.chdir(location)
 
     # Display installation message
-    print("\n{0} LEGO Rock Raiders is installing".format(choice(messages)))
+    print "\n{0} LEGO Rock Raiders is installing".format(choice(messages))
 
     #FIXME: Extract to proper location, no chdir needed?
     # Extract the cab
@@ -212,10 +212,10 @@ def install(drive, location):
     copydata(drive, location, first=False)
 
     # Display success message
-    print('''
+    print '''
 LEGO Rock Raiders successfully installed to
 {0}
-'''.format(location))
+'''.format(location)
 
     # Change the working directory back to LMS location
     os.chdir(os.path.dirname(sys.argv[0]))
@@ -234,5 +234,5 @@ def extractresources(location):
     res = ["d3drm.dll", "i5comp.exe", "ZD51145.DLL"]
 
     # Extract the resources
-    print("Extracting resources")
+    print "Extracting resources"
     [zipf.extract(r, location) for r in res]
