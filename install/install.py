@@ -38,7 +38,6 @@ def select():
 
     # The disc was selected
     else:
-        print(drive)
         # The file needed to confirm this is a valid disc
         valid_file = os.path.join(drive, "exe".lower(), "legorr.exe".lower())
 
@@ -54,7 +53,7 @@ def select():
 
             # Create the installation folder if we need to
             if not os.path.exists(location):
-                os.mkdir(location)
+                os.makedirs(location)
 
             # Begin installation
             install(drive, location)
@@ -117,8 +116,7 @@ Your existing installation will be moved to
                 #TODO: Catch common error?
                 distutils.dir_util.copy_tree(location, new_location)
                 # Display sucess message
-                print("\Backup created sucessfully.")
-
+                print("\nBackup created sucessfully.")
 
                 print("\nRemoving original installation")
                 # Update permissions so we can remove it
@@ -126,13 +124,11 @@ Your existing installation will be moved to
 
                 # Remove the original installation, since it's been backed up
                 distutils.dir_util.remove_tree(location)
-                #FIXME: connect this to the actual installation
-                raise SystemExit(0)
 
+                # Rereate the installation path
+                os.makedirs(location)
 
-        # Otherwise, overwite the existing installation
-
-        # Copy the CAB and HDR
+        # Copy the CAB and HDR from the disc to the installation path
         print("Copying CAB archive")
         distutils.file_util.copy_file(
             os.path.join(drive, "data1.hdr"), location)
