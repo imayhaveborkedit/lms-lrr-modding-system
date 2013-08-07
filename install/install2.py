@@ -41,17 +41,16 @@ def select():
         print(drive)
         # The file needed to confirm this is a valid disc
         valid_file = os.path.join(drive, "exe".lower(), "legorr.exe".lower())
+
         # The file was found, this is a valid disc
         if os.path.isfile(valid_file):
-            print("\nValid Rock Raiders disc selected.")
+            print("\nValid Rock Raiders disc detected.")
+
+            #TODO: Merge this code into Doc's
 
             # Where we will install the game to
             location = os.path.join(os.path.expanduser("~"), "Desktop",
                  "LEGO Rock Raiders")
-
-            #location = "C:/tmp/LegoRR"
-
-            #TODO: Merge this code into Doc's
 
             # Create the installation folder if we need to
             if not os.path.exists(location):
@@ -87,26 +86,41 @@ def copydata(drive, location, first=True):
         # If an installation already exists
         if os.path.exists(os.path.join(location, "LegoRR.exe")):
             move_install = input('''
-An installation already exists. Do you want to make a copy of it? {0} '''
-        .format(r"(Y\N)"))
+An existing installation has been detected.
+Would you like to make a backup first? {0} '''.format(r"(Y\N)"))
 
             # Yes, they do want to backup their existing installation
             if move_install.lower() == "y":
-                print("\nWARNING: This may take a while")
+                print("\nWARNING: This may take a while.")
+
+                # Used to copy an existing installation
+                count = 1
+
+                # Define the new location
+                new_location = "{0} Install {1}".format(location, count)
+
+                # Another backup installation already exists
+                while os.path.exists(new_location):
+
+                    # Update the count
+                    count += 1
+
+                    # Define updated backup location
+                    new_location = "{0} Install {1}".format(location, count)
+
+                # Tell user where the backup will be located
+                print('''
+Your existing installation will be moved to
+{0}'''.format(new_location))
+
+                # Copy the installation
+                #TODO: Catch common error?
+                distutils.dir_util.copy_tree(location, new_location)
+                # Display sucess message
+                print("\Backup created sucessfully.")
+
+                #FIXME: connect this to the actual installation
                 raise SystemExit(0)
-
-                #FIXME: This entire section
-                count = 0
-                if os.path.exists(os.path.join(os.path.expanduser("~"),
-                "Desktop", "LEGO Rock Raiders")):
-                    while os.path.exists(os.path.join(os.path.expanduser("~"),
-                    "Desktop", "LEGO Rock Raiders")):
-
-                        count += 1
-
-                        distutils.dir_util.copy_tree(location, os.path.join(location,
-                        os.path.expanduser("~"),
-                        "Desktop", "LEGO Rock Raiders {0}").format(count))
 
 
         # Otherwise, overwite the existing installation
@@ -191,9 +205,10 @@ def install(drive, location=None):
 
     # Let's have some fun with the message
     messages = ["Sight tight,", "Hold on,", "Grab your dynamite, because",
-    "Be prepared for landslides, because", "Build Rock Raiders HQ, because",
+    "Be prepared for landslides, because",
+    "Start building Rock Raiders HQ, because",
     "Watch for emerging Rock Monsters, because",
-    "Slimy Slugs are attacking the base!"]
+    "Slimy Slugs are attacking your base!"]
 
     # Change the working directory to the installation path
     os.chdir(location)
@@ -209,7 +224,9 @@ def install(drive, location=None):
     copydata(drive, location, first=False)
 
     # Display success message
-    print("\nLEGO Rock Raiders has been successfully installed.")
+    print('''
+LEGO Rock Raiders successfully installed to
+{0}'''.format(location))
 
     # Change the working directory back to LMS location
     os.chdir(os.path.dirname(sys.argv[0]))
