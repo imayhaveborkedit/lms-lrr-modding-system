@@ -1,14 +1,17 @@
 from ctypes import windll, create_string_buffer
 import struct
 
+
 def getX():
     return getTerminalSize()[0]
+
 
 def getY():
     return getTerminalSize()[1]
 
+
 def getTerminalSize():
-    res=None
+    res = None
     try:
         h = windll.kernel32.GetStdHandle(-12)
         csbi = create_string_buffer(22)

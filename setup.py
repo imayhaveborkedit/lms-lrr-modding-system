@@ -1,19 +1,25 @@
 from distutils.core import setup
-import py2exe, sys, os, shutil, zipfile
+import sys
+import os
+import shutil
+import zipfile
+import py2exe
 import LMS
+
 sys.argv.append('py2exe')
+
 setup(
-    options = {
+    options={
         'py2exe': {
             'bundle_files': 1,
             'compressed': True,
             'optimize': 1,
             'dll_excludes': ['w9xpopen.exe'],
-            'excludes':['email']
+            'excludes': ['email']
             }},
-    console = [{'script': 'LMS.py','icon_resources': [(1, 'LMSicon32.ico')]}],
-    version = LMS.VERSION,
-    zipfile = None,
+    console=[{'script': 'LMS.py', 'icon_resources': [(1, 'LMSicon32.ico')]}],
+    version=LMS.VERSION,
+    zipfile=None,
 )
 shutil.rmtree(r'C:\Users\Daniel\Documents\GitHub\lms-lrr-modding-system\build')
 
