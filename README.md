@@ -18,4 +18,5 @@ Author
 ------
 
 * TheDoctor
+* [@Anonymooseable](https://github.com/Anonymooseable) (Bitdepth module)
 * [Triangle717](https://github.com/le717) (Installer)
