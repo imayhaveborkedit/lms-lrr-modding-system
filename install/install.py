@@ -119,6 +119,13 @@ Your existing installation will be moved to
                 # Display sucess message
                 print("\Backup created sucessfully.")
 
+
+                print("\nRemoving original installation")
+                # Update permissions so we can remove it
+                permissions(location)
+
+                # Remove the original installation, since it's been backed up
+                distutils.dir_util.remove_tree(location)
                 #FIXME: connect this to the actual installation
                 raise SystemExit(0)
 
@@ -188,17 +195,15 @@ Your existing installation will be moved to
         #print("something something ask user")
 
 
-def install(drive, location=None):
+def install(drive, location):
     '''Runs Installation Actions'''
 
     # Check for proper attributes, and if they match, extract the resources
-    #if (hasattr(sys, "frozen") and sys.frozen in ("windows_exe", "console_exe")
-     #and location is not None):
+    #if hasattr(sys, "frozen") and sys.frozen in ("windows_exe", "console_exe"):
         #extractresources()
 
     # Extract the resources
-    if location is not None:
-        extractresources(location)
+    extractresources(location)
 
     # Copy the files over
     copydata(drive, location, first=True)
