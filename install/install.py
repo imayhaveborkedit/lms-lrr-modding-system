@@ -129,15 +129,21 @@ Your existing installation will be moved to
                 os.makedirs(location)
 
         # Copy the CAB and HDR from the disc to the installation path
-        print("Copying CAB archive")
+        print("\nCopying required files")
         distutils.file_util.copy_file(
             os.path.join(drive, "data1.hdr"), location)
 
         distutils.file_util.copy_file(
             os.path.join(drive, "data1.cab"), location)
 
+        # Extract the resources
+        extractresources(location)
+
     # We need to perform final installation actions
     elif not first:
+
+        # Display near file installation
+        print("\nFinishing up installation")
 
         # Change the permissions on the files
         permissions(location)
@@ -197,9 +203,6 @@ def install(drive, location):
     # Check for proper attributes, and if they match, extract the resources
     #if hasattr(sys, "frozen") and sys.frozen in ("windows_exe", "console_exe"):
         #extractresources()
-
-    # Extract the resources
-    extractresources(location)
 
     # Copy the files over
     copydata(drive, location, first=True)
