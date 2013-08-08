@@ -24,6 +24,7 @@ setup(
 shutil.rmtree(r'C:\Users\Daniel\Documents\GitHub\lms-lrr-modding-system\build')
 
 os.chdir('dist/')
+os.remove("LMS.zip")
 z = zipfile.ZipFile("LMS.zip", 'w')
 z.write('LMS.exe', compress_type=zipfile.ZIP_DEFLATED)
 z.close()

@@ -1,4 +1,4 @@
-import colors
+from colors import text
 
 FG_BLACK         = 0x00
 FG_BLUE          = 0x01

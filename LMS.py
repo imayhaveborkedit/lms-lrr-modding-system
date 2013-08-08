@@ -7,7 +7,7 @@ import zipfile
 import bisect  # wtf py2exe
 
 import game
-from color import *
+import color
 from wad import wadtool
 from helper import term, menu, update
 
@@ -39,20 +39,20 @@ def initLMS():
     preloadobserve()
     preloadchecks()
     if LMSREADY:
-        colors.pc("System online, initalizing interface (but not really)...", color.FG_LIGHT_GREEN)
+        color.text("System online, initalizing interface (but not really)...", color.FG_LIGHT_GREEN)
         initGUI()
 
 
 def preloadobserve():
-    colors.pc("Gathering environment varibles...", color.FG_GREEN)
+    color.text("Gathering environment varibles...", color.FG_GREEN)
     if 'Program Files' in os.getcwd():
-        colors.pc("Warning: Running from Program Files folder.  Not advised.  [insert stuff/menu here]", color.FG_LIGHT_YELLOW)
+        color.text("Warning: Running from Program Files folder.  Not advised.  [insert stuff/menu here]", color.FG_LIGHT_YELLOW)
     #import install
     #install.check()
 
 
 def preloadchecks():
-    colors.pc("Running preload checks...", color.FG_GREEN)
+    color.text("Running preload checks...", color.FG_GREEN)
 
     pd(os.getcwd())
     if DEBUG:
@@ -100,16 +100,18 @@ def preloadchecks():
 ## SHUTDOWN STUFF ##############################################################
 
 def cleanup():
-    colors.color(" * Powering down...", color.FG_GREEN)
+    color.text(" * Powering down...", color.FG_GREEN)
     # cleanup curses
     # curses.nocbreak(); stdscr.keypad(0); curses.echo(); curses.endwin()
+
+    # screw curses
     sys.exit()
 
 ## blar ########################################################################
 
 
 def pd(i):
-    if DEBUG: colors.color(" @ " + str(i), color.FG_CYAN)
+    if DEBUG: color.text(" @ " + str(i), color.FG_CYAN)
 
 ## MAIN MENU, WILL BE REPLACED BY GUI ## PROBABLY ## MAYBE #####################
 
@@ -120,14 +122,14 @@ def mainmenu():
         print
         print " Game: ",
         if LMSREADY:
-            colors.color("Ready", color.FG_LIGHT_GREEN)
+            color.text("Ready", color.FG_LIGHT_GREEN)
             print " WADs: ",
             if WADSAREPRIME:
-                colors.color("Primed for Data Method", color.FG_LIGHT_GREEN)
+                color.text("Primed for Data Method", color.FG_LIGHT_GREEN)
             else:
-                colors.color("Not primed", color.FG_LIGHT_YELLOW)
+                color.text("Not primed", color.FG_LIGHT_YELLOW)
 
-        else: colors.color("Not ready", color.FG_LIGHT_RED)
+        else: color.text("Not ready", color.FG_LIGHT_RED)
         print
 
         menu_main = menu.Menu([("Launch LRR", launchGame), ("Prime WADs", primeWADs), ("Quit", cleanup)])
@@ -147,7 +149,7 @@ def launchGame():
 
 def primeWADs():
     if not wadtool.checkwads(): WADSAREPRIME = wadtool.primewads()
-    else: colors.color("Wad check failed.", color.FG_YELLOW)
+    else: color.text("Wad check failed.", color.FG_YELLOW)
 
 ################################################################################
 
@@ -157,7 +159,7 @@ def cls():
 
 
 def main():
-    colors.pc("Powering up LMS...", color.FG_GREEN)
+    color.text("Powering up LMS...", color.FG_GREEN)
     try:
         initLMS()
         mainmenu()
@@ -174,8 +176,13 @@ def main():
     cleanup()
 
 if __name__ == '__main__':
-    # Write window title
-    os.system("title {0} Version {1} {2}".format(NAME, VERSION, SUBVERSION)
+
+    import install
+    install.install.check()
+    return
+
+
+    os.system("title {0} Version {1} {2}".format(NAME, VERSION, SUBVERSION))
     print NAME + " Version " + VERSION + ' ' + SUBVERSION + "\n"
     if update.checkupdate():
         print "Update is available, updating..."

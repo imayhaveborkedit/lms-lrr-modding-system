@@ -1,24 +1,17 @@
-# General imports
 import sys
 import os
 
-# Copy and delete files
 import distutils.file_util
 import distutils.dir_util
 import stat
 
-# Detect the CD
 import wmi
 
-# Extract the cab and resources
 import subprocess
 import zipfile
+import textwrap
 
-# Colored text
-from color import *
-
-# Bit a fun. :)
-from random import choice
+import color
 
 
 def permissions(folder):
@@ -114,16 +107,16 @@ Your existing installation will be moved to
         distutils.dir_util.remove_tree("Registration")
 
         # Delete unneeded files
-        os.unlink("Autorun.exe")
-        os.unlink("Autorun.inf")
-        os.unlink("LegoRR.exe")
-        os.unlink("LegoRR.icd")
-        os.unlink("i5comp.exe")
-        os.unlink("ZD51145.DLL")
-        os.unlink("data1.cab")
-        os.unlink("data1.hdr")
-        os.unlink(os.path.join("Data", "Delme.dat"))
-        os.unlink(os.path.join("Data", "cd.key"))
+        os.remove("Autorun.exe")
+        os.remove("Autorun.inf")
+        os.remove("LegoRR.exe")
+        os.remove("LegoRR.icd")
+        os.remove("i5comp.exe")
+        os.remove("ZD51145.DLL")
+        os.remove("data1.cab")
+        os.remove("data1.hdr")
+        os.remove(os.path.join("Data", "Delme.dat"))
+        os.remove(os.path.join("Data", "cd.key"))
 
          # Copy the correct Exe and ICD
         distutils.file_util.copy_file(
@@ -139,83 +132,63 @@ Your existing installation will be moved to
 
 
 def check():
-    '''Detects for a valid Rock Raiders disc'''
-
-    #TODO: Comment this section
     c = wmi.WMI()
     drive = None
+    names = ["ROCKRAIDERS", "ROCK RAIDERS"]
+
     for cdrom in c.Win32_CDROMDrive():
-        colors.color(" * CD Drives: ", color.FG_GREEN)
+        color.text(" * CD Drives: ", color.FG_GREEN)
         vname = cdrom.VolumeName if cdrom.VolumeName is not None else "[None]"
 
         if u'OK' in cdrom.Status and cdrom.mediaLoaded:
-            colors.color(u" - %s | " % cdrom.Drive, color.FG_GREEN, nl=False)
+            color.text(u" - %s | " % cdrom.Drive, color.FG_GREEN, nl=False)
         else:
-            colors.color(u" - %s | " % cdrom.Drive, color.FG_LIGHT_RED, nl=False)
+            color.text(u" - %s | " % cdrom.Drive, color.FG_LIGHT_RED, nl=False)
 
-        # List of valid disc names
-        names = ["ROCKRAIDERS", "ROCK RAIDERS"]
-
-        # If the disc title is in the list, #FIXME: What happens?
         if vname.upper() in names:
-            colors.color(vname, color.FG_GREEN)
+            color.text(vname, color.FG_GREEN)
             drive = cdrom.Drive
-        # The disc title is not in the list, #FIXME: What happens?
         else:
-            colors.color(vname, color.FG_LIGHT_RED)
+            color.text(vname, color.FG_LIGHT_RED)
+    print;
 
-    # The disc title matched, this is a valid disc
     if drive is not None:
-        print "\nValid Rock Raiders disc detected"
+        print "Valid Rock Raiders disc detected"
 
-        # Where we will install the game
         location = os.path.join(os.path.expanduser("~"), "Desktop",
              "LEGO Rock Raiders")
 
-        # Create the installation folder if we need to
         if not os.path.exists(location):
             os.makedirs(location)
-
-        # Begin installation
         install(drive, location)
 
     else:
-        print "\nCould not detect a valid Rock Raiders disc"
-        # Return False to denote failed installation
-        return False
+        tex = textwrap.wrap("Could not detect a valid Rock Raiders disc. " +
+        "This may because you have a different version.  If you are ABSOLUTELY" +
+        "sure that the disk is a Rock Raiders disk, type the letter of the drive. " +
+        "If not, then just hit enter.")
+        for t in tex: print " " + t
+
+        try: r = str(sys.stdin.readline()[:-1])
+        except: r = None
+        # add check for if r is a real drive.  Probably make a list of drives when checking them above
+        if r:
+            location = os.path.join(os.path.expanduser("~"), "Desktop",
+             "LEGO Rock Raiders")
+
+            if not os.path.exists(location):
+                os.makedirs(location)
+            install(r.upper()[0]+':', location)
+
+        else: return False
 
 
+# change to pushd/popd
 def install(drive, location):
-    '''Runs Installation Actions'''
-
-    # Copy the files over
     copydata(drive, location, first=True)
-
-    # Let's have some fun with the message
-    messages = ["Sit tight,", "Hold on,", "Grab your dynamite, because",
-    "Be prepared for landslides, because",
-    "Start building Rock Raiders HQ, because",
-    "Watch for emerging Rock Monsters, because",
-    "Slimy Slugs are attacking your base!"]
-
-    # Change the working directory to the installation path
     os.chdir(location)
-
-    # Display installation message
-    print "\n{0} LEGO Rock Raiders is installing".format(choice(messages))
-
-    #FIXME: Extract to proper location, no chdir needed?
-    # Extract the cab
     subprocess.call(["i5comp.exe", "x", "-o", "data1.cab"])
-
-    # Copy the Exe and ICD over, delete all the other files
     copydata(drive, location, first=False)
-
-    # Display success message
-    print '''
-LEGO Rock Raiders successfully installed to
-{0}
-'''.format(location)
 
     # Change the working directory back to LMS location
     os.chdir(os.path.dirname(sys.argv[0]))
@@ -225,14 +198,10 @@ LEGO Rock Raiders successfully installed to
 
 
 def extractresources(location):
-    '''Extract the DLL and CAB Resources'''
-
-    # Open the Exe
     zipf = zipfile.ZipFile(sys.executable)
-
-    # List of files to extract
     res = ["d3drm.dll", "i5comp.exe", "ZD51145.DLL"]
-
-    # Extract the resources
     print "Extracting resources"
     [zipf.extract(r, location) for r in res]
+
+if __name__ == '__main__':
+    check()
